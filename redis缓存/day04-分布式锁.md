@@ -186,8 +186,8 @@ try {
 
 ```java
 // ❌ 这两步不是原子的！
-String currentValue = stringRedisTemplate.opsForValue().get(key);  // 步骤1：判断
-if (threadId.equals(currentValue)) {
+String currentValue = stringRedisTemplate.opsForValue().get(key);  
+if (threadId.equals(currentValue)) {// 步骤1：判断
     stringRedisTemplate.delete(key);  // 步骤2：删除
 }
 ```
@@ -195,7 +195,7 @@ if (threadId.equals(currentValue)) {
 **极端场景**：
 1. 判断通过（是自己的锁）✅
 2. JVM GC（垃圾回收）导致线程阻塞
-3. 阻塞期间，锁过期被自动删除 ⏰
+3. 阻塞期间，锁过期被自动删除(超时释放) ⏰
 4. 另一个线程获取了这把锁 🔒
 5. GC 结束，线程继续执行 → `delete(key)` → **把别人的锁删了！**
 
@@ -387,6 +387,9 @@ public void doSomething() {
 #### 7.3.1 可重入锁
 
 同一个线程可以多次获取同一把锁，通过 **Hash 结构 + 计数器** 实现：
+![图 0](../images/d150c6538797234b5c5270fdf7b4cfcbd2f63350a00b864b6a1231af4d609f76.png)  
+![图 1](../images/3d86507744f53bb167db8cc9034a208a761a51ed14eb18e1f44f756c4a3fe833.png)  
+
 
 ```
 Key: lock:order:1001
