@@ -1,0 +1,224 @@
+# Day03 - 优惠券秒杀
+
+## 1. 全局唯一ID
+
+### 1.1 为什么需要全局唯一ID？
+
+数据库自增ID存在的问题：
+- **ID规律性太明显**：用户/竞争对手可以轻易推算出敏感信息（如一天卖了多少单）
+- **受单表数据量限制**：MySQL单表容量不宜超过500W，数据量大时需要分库分表，但拆分后的表逻辑上是同一张表，ID不能重复
+
+### 1.2 全局ID生成器特性
+
+| 特性 | 说明 |
+|------|------|
+| 唯一性 | 分布式系统中保证唯一 |
+| 高可用 | 随时可以生成 |
+| 高性能 | 生成速度快 |
+| 递增性 | 整体趋势递增（利于索引） |
+| 安全性 | 没有规律，不可猜测 |
+
+### 1.3 ID结构设计（64位Long）
+
+```
+0 | 000...000 | 000...000
+↑      ↑           ↑
+符号位  时间戳31bit  序列号32bit
+(1bit)  (可用69年)   (秒内2^32个)
+```
+
+- **符号位**：1bit，永远为0（保证正数）
+- **时间戳**：31bit，以秒为单位，从自定义起始时间算起，可用69年
+- **序列号**：32bit，同一秒内的自增计数器，支持每秒产生约42亿个不同ID
+
+---
+
+## 2. Redis实现全局唯一ID
+
+### 2.1 核心代码：RedisIdWorker
+
+```java
+@Component
+public class RedisIdWorker {
+    // 自定义起始时间戳 (2022-01-01 00:00:00)
+    private static final long BEGIN_TIMESTAMP = 1640995200L;
+    // 序列号位数
+    private static final int COUNT_BITS = 32;
+
+    private StringRedisTemplate stringRedisTemplate;
+
+    public long nextId(String keyPrefix) {
+        // 1. 生成时间戳
+        LocalDateTime now = LocalDateTime.now();
+        long nowSecond = now.toEpochSecond(ZoneOffset.UTC);
+        long timestamp = nowSecond - BEGIN_TIMESTAMP;
+
+        // 2. 生成序列号（利用Redis自增）
+        // key格式: "icr:业务前缀:yyyy:MM:dd"（按天区分，自动过期）
+        String date = now.format(DateTimeFormatter.ofPattern("yyyy:MM:dd"));
+        long count = stringRedisTemplate.opsForValue()
+                        .increment("icr:" + keyPrefix + ":" + date);
+
+        // 3. 拼接：时间戳左移32位 | 序列号
+        return timestamp << COUNT_BITS | count;
+    }
+}
+```
+
+### 2.2 关键设计点
+
+- **Redis INCR** 天然原子性，保证序列号唯一
+- **按天分Key**：每天一个key，方便统计和过期清理
+- **位运算拼接**：`timestamp << 32 | count`，高位存时间戳、低位存序列号，保证整体递增
+
+### 2.3 知识点：CountDownLatch
+
+用于多线程测试时的同步协调：
+
+- `await()`：阻塞主线程，直到内部计数器变为0
+- `countDown()`：计数器减1
+- **作用**：确保所有子线程执行完毕后，主线程再继续（统计总耗时等）
+
+```java
+CountDownLatch latch = new CountDownLatch(300);  // 300个任务
+
+Runnable task = () -> {
+    for (int i = 0; i < 100; i++) {
+        long id = redisIdWorker.nextId("order");
+    }
+    latch.countDown();  // 每个任务完成，计数-1
+};
+
+for (int i = 0; i < 300; i++) {
+    es.submit(task);
+}
+latch.await();  // 阻塞，等300个任务全部完成
+```
+
+---
+
+## 3. 超卖问题与锁机制
+
+### 3.1 超卖问题场景
+
+多线程并发场景：
+1. 线程1查询库存 → 库存 > 1
+2. 线程2查询库存 → 库存 > 1（线程1还没来得及扣减）
+3. 两个线程都去扣减库存 → **超卖**
+
+这是典型的多线程安全问题。
+
+### 3.2 悲观锁 vs 乐观锁
+
+
+| | 悲观锁 | 乐观锁 |
+|------|--------|--------|
+| **思路** | 认为别人一定会修改数据，添加同步锁，让线程串行执行 | 认为别人不会修改，不加锁，在更新时判断是否有其它线程在修改 |
+| **代表** | `synchronized`、`Lock`（公平锁/非公平锁/可重入锁） | CAS、版本号机制 |
+| **特点** | 串行化执行，安全但性能低 | 无锁化，适合读多写少 |
+| **适用** | 写操作多、冲突概率高 | 读操作多、冲突概率低 |
+
+---
+
+## 4. 乐观锁详解
+
+### 4.1 版本号机制
+
+每次操作数据时版本号+1，提交时校验版本号是否比之前大1：
+- **大1** → 中间没人改过 → 操作成功
+- **不大1** → 数据被改过 → 操作失败
+
+### 4.2 CAS（Compare And Swap）
+
+乐观锁的典型实现：
+
+```java
+int var5;
+do {
+    var5 = this.getIntVolatile(var1, var2);        // 读取当前内存值
+} while(!this.compareAndSwapInt(var1, var2, var5, var5 + var4));  // CAS操作
+return var5;
+```
+
+- **var5**：操作前读取的内存值（期望值）
+- **var1 + var2**：预估值
+- 如果 `预估值 == 内存值` → 中间没人改过 → CAS成功，替换为新值
+- 如果失败 → **do-while自旋**，重新读取再尝试
+
+### 4.3 课程中的乐观锁实现
+
+课程中不使用CAS自旋，而是**在SQL层面加条件**：
+
+**方案一（严格版）：**
+```java
+// WHERE stock = 之前查到的库存值
+.setSql("stock = stock - 1")
+.eq("voucher_id", voucherId)
+.eq("stock", voucher.getStock())  // 要求stock和查的时候一样
+.update();
+```
+- 问题：100个线程同时拿到100，只有1个能成功，成功率太低
+
+**方案二（改进版）：**
+```java
+// WHERE stock > 0 即可
+.setSql("stock = stock - 1")
+.eq("voucher_id", voucherId)
+.gt("stock", 0)  // 只要还有库存就能扣
+.update();
+```
+- 优点：成功率大幅提升，不会有"明明有库存却失败"的情况
+
+### 4.4 LongAdder（知识扩展）
+
+- Java 8 提供，对 `AtomicLong` 的改进
+- **问题**：大量线程并发更新CAS时，自旋压力大
+- **解决**：LongAdder 将值分散到多个 Cell，减少竞争
+- **取值**：将 Cell 和 Base 的值累加返回最终结果
+
+---
+
+## 5. 一人一单
+
+### 5.1 需求
+
+同一个优惠券，一个用户只能下一单。
+
+### 5.2 实现思路
+
+```java
+// 查询用户是否已有该优惠券的订单
+Integer count = query().eq("user_id", userId)
+                       .eq("voucher_id", voucherId).count();
+if (count > 0) {
+    return Result.fail("用户已经购买过一次！");
+}
+```
+
+### 5.3 并发问题
+
+和超卖一样的问题：并发请求同时查询 → 都发现没有订单 → 都去创建订单 → 一人多单。
+
+**解决**：需要加锁，但注意：
+- **乐观锁适合更新数据**（如扣库存）
+- **插入数据需要用悲观锁**（如创建订单）
+
+### 5.4 单机 vs 集群
+
+- **单机情况**：`synchronized` 或 `Lock` 可以解决一人一单
+- **集群模式**：单机锁失效，需要**分布式锁**（后续内容）
+
+---
+
+## 6. 总结
+
+| 知识点 | 核心要点 |
+|--------|----------|
+| 全局唯一ID | 64位结构：符号位(1) + 时间戳(31) + 序列号(32)，Redis INCR保证唯一 |
+| Redis ID Worker | 按天分key，位运算拼接，整体递增 |
+| CountDownLatch | await阻塞 / countDown减1，用于多线程同步 |
+| 悲观锁 | syn/Lock，串行化，适合写冲突多的场景 |
+| 乐观锁 | 版本号/CAS，无锁化，适合读多写少的场景 |
+| CAS自旋 | 失败后循环重试，高并发下压力大（LongAdder优化） |
+| SQL乐观锁 | `stock > 0` 比严格 `stock = 原值` 成功率更高 |
+| 一人一单 | 插入操作需悲观锁，集群需分布式锁 |
