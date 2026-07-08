@@ -41,6 +41,8 @@
                                    │   (创建订单DB)   │
                                    └─────────────────┘
 ```
+![图 0](../images/f522156af308e6dfaeddc9f2df8fad9a35a27280f49c456c7a5873ff87e51b04.png)  
+![图 1](../images/48e1959672343a61e517ed2023cb7073b47e3f2a81396814ebb8dbe4a6a3e04b.png)  
 
 **核心思路 — 将业务拆分为两步**：
 1. **快速返回**：Redis 中做资格校验 + 扣库存（Lua 原子脚本），返回订单号
@@ -200,6 +202,8 @@ public Result seckillVoucher(Long voucherId, Long userId) {
 #### 原理
 
 Redis 的 List 数据结构天然支持队列操作：
+![图 2](../images/63b0457b0b42d53ce7400e9daffe13f1df193c7368426604bd7a3b49d33dfb0f.png)  
+
 
 ```
 生产者 LPUSH ──→ [  List  ] ──→ BRPOP 消费者
@@ -280,6 +284,8 @@ public class OrderConsumer implements InitializingBean {
 ### 4.2 方式二：Pub/Sub（发布订阅）
 
 #### 原理
+![图 3](../images/5768e70fd10efb52455f99c0c56d25193e319301539b5dfe2187d3df94f5fa68.png)  
+
 
 ```
 生产者 PUBLISH                   消费者1 SUBSCRIBE
