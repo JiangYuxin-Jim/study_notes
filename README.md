@@ -28,6 +28,8 @@
 | [04 - 数组](./JavaSE/04-数组.md) | 数组初始化、遍历、常见操作、冒泡排序、二维数组 | ✅ |
 | [05 - 方法](./JavaSE/05-方法.md) | 方法定义/调用、重载、参数传递（值传递）、递归 | ✅ |
 | [06 - Java 运行原理](./JavaSE/06-Java运行原理.md) | 编译与运行、JVM 内存模型、类加载（双亲委派）、GC 简介 | ✅ |
+| [07 - 面向对象编程](./JavaSE/07-面向对象编程.md) | 类与对象、封装、this、构造方法、标准 JavaBean、ArrayList、学生管理系统 | ✅ |
+| [08 - 字符串(String)](./JavaSE/08-字符串(String).md) | String 创建/比较/API、不可变性、StringBuilder、StringJoiner | ✅ |
 
 ### JavaWeb
 
