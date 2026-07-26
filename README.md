@@ -31,6 +31,10 @@
 | [18 - 斗地主阶段项目](./JavaSE/18-斗地主阶段项目.md) | 生成牌、洗牌、发牌、排序、面向对象设计 (Poker/Player)、游戏完善 | 2026-07-24 |
 | [19 - 不可变集合与 Stream 流基础](./JavaSE/19-不可变集合与Stream流基础.md) | 不可变集合 (of/copyOf)、Stream 流概述、四种获取方式、流水线模式 | 2026-07-24 |
 | [20 - Stream 流进阶与方法引用](./JavaSE/20-Stream流与方法引用.md) | Stream 流中间/终结操作、collect 收集方法、方法引用 6 种形式 | 2026-07-25 |
+| [21 - 异常体系](./JavaSE/21-异常体系.md) | 异常体系、编译时/运行时异常、try-catch、throws、自定义异常 | 2026-07-26 |
+| [22 - File 类](./JavaSE/22-File类.md) | File 构造/判断/获取/创建/删除/遍历、递归遍历、文件过滤器 | 2026-07-26 |
+| [23 - IO 流基础（字节流与字符流）](./JavaSE/23-IO流基础（字节流与字符流）.md) | 字节流/字符流、文件拷贝、read() vs read(byte[])、编码解码 | 2026-07-26 |
+| [24 - IO 流进阶（缓冲流·转换流·序列化流）](./JavaSE/24-IO流进阶（缓冲流·转换流·序列化流）.md) | 缓冲流原理、BufferedReader.readLine()、转换流解决乱码、序列化/transient/serialVersionUID、FileWriter 底层缓冲区 | 2026-07-26 |
 
 ### JavaWeb
 
