@@ -39,6 +39,9 @@
 | [26 - IO 流进阶（二）· 字符缓冲流](./JavaSE/26-IO流进阶（二）-字符缓冲流.md) | BufferedReader(readLine) / BufferedWriter(newLine)、按行读写、排序练习 | 2026-07-27 |
 | [27 - IO 流进阶（三）· 转换流与序列化流](./JavaSE/27-IO流进阶（三）-转换流与序列化流.md) | InputStreamReader/OutputStreamWriter、ObjectInputStream/ObjectOutputStream、Serializable、serialVersionUID、transient | 2026-07-27 |
 | [28 - IO 流进阶（四）· 打印流与 Commons-IO](./JavaSE/28-IO流进阶（四）-打印流与Commons-IO.md) | PrintStream/PrintWriter、System.out、自动刷新、Commons-IO(FileUtils/IOUtils)、压缩流 | 2026-07-27 |
+| [29 - IO 流进阶（五）· Properties 与压缩流](./JavaSE/29-IO流进阶（五）-Properties与压缩流.md) | Properties 配置文件读写、ZipOutputStream/ZipInputStream 压缩解压、IO 流全体系总结 | 2026-07-28 |
+| [30 - 多线程基础](./JavaSE/30-多线程基础（创建与线程安全）.md) | 三种创建方式（Thread/Runnable/Callable）、线程安全、synchronized/Lock、死锁、等待唤醒、volatile、Atomic | 2026-07-28 |
+| [31 - 多线程进阶](./JavaSE/31-多线程进阶（并发工具与线程池）.md) | 线程池（Executor/ThreadPoolExecutor）、CountDownLatch、CyclicBarrier、Semaphore、阻塞队列、并发集合、ForkJoin | 2026-07-28 |
 
 ### JavaWeb
 
@@ -78,3 +81,13 @@
 > 从上到下按时间排列，每天学什么一目了然。
 
 <img alt="学习历程时间线" src="./images/learning-timeline.svg" width="100%">
+
+---
+
+## 📌 学习进度
+
+- ✅ JavaSE 基础篇（1~28 篇）— 已完成
+- 🔄 JavaSE 网络编程进行中...
+- ✅ JavaWeb — 已完成
+- ✅ Redis 缓存 — 基础笔记已完成
+- ⏳ 下一阶段：SpringCloud 微服务
