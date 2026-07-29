@@ -157,16 +157,24 @@
   <rect x="72" y="1084" width="266" height="40" rx="5" fill="#3b82f6" opacity="0.95"/>
   <text x="205" y="1108" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">🔥 IO 流扫尾 · 多线程/JUC · 网络编程(P110→P168)</text>
 
+  <!-- Row 24: y=1126 -->
+  <line x1="60" y1="1170" x2="860" y2="1170" stroke="#f1f5f9" stroke-width="1"/>
+  <text x="30" y="1153" font-size="12" font-weight="600" fill="#22c55e" text-anchor="middle">7/29</text>
+  <text x="30" y="1166" font-size="9" fill="#94a3b8" text-anchor="middle">周三</text>
+  <rect x="72" y="1128" width="266" height="40" rx="5" fill="#3b82f6" opacity="0.95"/>
+  <text x="205" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">🎉 JavaSE 完结！P168→P200（反射·动态代理）</text>
+  <rect x="632" y="1128" width="226" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
+  <text x="745" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">📝 Redis 笔记补全（8篇新笔记）</text>
+
   <!-- 底部进度 -->
-  <line x1="60" y1="1150" x2="860" y2="1150" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="30" y="1170" font-size="12" fill="#5b6475" text-anchor="middle">进度</text>
-  <rect x="80" y="1158" width="10" height="10" rx="2" fill="#3b82f6" opacity="0.85"/>
-  <text x="95" y="1168" font-size="11" fill="#172033">JavaSE 上部 ✅</text>
-  <rect x="185" y="1158" width="10" height="10" rx="2" fill="#10b981" opacity="0.85"/>
-  <text x="200" y="1168" font-size="11" fill="#172033">JavaWeb ✅</text>
-  <rect x="280" y="1158" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.85"/>
-  <text x="295" y="1168" font-size="11" fill="#172033">Redis ✅</text>
-  <text x="485" y="1168" font-size="11" fill="#5b6475" text-anchor="middle">进行中：JavaSE 下部（进阶） · 已学 31 篇笔记 · P168/200 集</text>
-  <text x="485" y="1183" font-size="11" fill="#5b6475" text-anchor="middle">覆盖：集合·Stream·异常·File·IO流全线·多线程/JUC·网络编程</text>
-  <text x="485" y="1210" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle">🔥 7/28 一天 58 集！P110→P168 全搞定</text>
+  <line x1="60" y1="1190" x2="860" y2="1190" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="30" y="1210" font-size="12" fill="#5b6475" text-anchor="middle">进度</text>
+  <rect x="80" y="1198" width="10" height="10" rx="2" fill="#3b82f6" opacity="0.85"/>
+  <text x="95" y="1208" font-size="11" fill="#172033">JavaSE ✅ 全部完结</text>
+  <rect x="200" y="1198" width="10" height="10" rx="2" fill="#10b981" opacity="0.85"/>
+  <text x="215" y="1208" font-size="11" fill="#172033">JavaWeb ✅</text>
+  <rect x="300" y="1198" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.85"/>
+  <text x="315" y="1208" font-size="11" fill="#172033">Redis ✅ 14篇笔记</text>
+  <text x="485" y="1208" font-size="11" fill="#5b6475" text-anchor="middle">下一阶段：SpringCloud 微服务 🎯</text>
+  <text x="485" y="1225" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle">🔥 7/29 JavaSE 200集全部学完！Redis 笔记同步补全</text>
 </svg>
