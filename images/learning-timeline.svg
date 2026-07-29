@@ -164,7 +164,7 @@
   <rect x="72" y="1128" width="266" height="40" rx="5" fill="#3b82f6" opacity="0.95"/>
   <text x="205" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">🎉 JavaSE 完结！P168→P200（反射·动态代理）</text>
   <rect x="632" y="1128" width="226" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
-  <text x="745" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">📝 Redis 笔记补全（8篇新笔记）</text>
+  <text x="745" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">📝 补写 Redis 短信登录笔记</text>
 
   <!-- 底部进度 -->
   <line x1="60" y1="1190" x2="860" y2="1190" stroke="#e2e8f0" stroke-width="1"/>
@@ -174,7 +174,7 @@
   <rect x="200" y="1198" width="10" height="10" rx="2" fill="#10b981" opacity="0.85"/>
   <text x="215" y="1208" font-size="11" fill="#172033">JavaWeb ✅</text>
   <rect x="300" y="1198" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.85"/>
-  <text x="315" y="1208" font-size="11" fill="#172033">Redis ✅ 14篇笔记</text>
+  <text x="315" y="1208" font-size="11" fill="#172033">Redis ✅ 7篇笔记</text>
   <text x="485" y="1208" font-size="11" fill="#5b6475" text-anchor="middle">下一阶段：SpringCloud 微服务 🎯</text>
-  <text x="485" y="1225" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle">🔥 7/29 JavaSE 200集全部学完！Redis 笔记同步补全</text>
+  <text x="485" y="1225" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle">🔥 7/29 JavaSE 200集全部学完！</text>
 </svg>

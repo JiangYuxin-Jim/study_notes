@@ -73,14 +73,7 @@
 | [04 - 分布式锁](./redis/04-分布式锁.md) | SETNX 演进路线、UUID + Lua 原子解锁、Redisson（WatchDog/可重入/RedLock） | 2026-07-07 |
 | [05 - 秒杀优化与消息队列](./redis/05-秒杀优化与消息队列.md) | Lua 脚本前置判断、异步下单、Redis 消息队列（List/PubSub/Stream）、消费者组 | 2026-07-08 |
 | [06 - 达人探店](./redis/06-达人探店.md) | 发布探店笔记、图片上传、点赞/取消点赞、SortedSet 点赞排行榜 | 2026-07-09 |
-| [07 - 好友关注](./redis/07-好友关注.md) | 社交关注、共同关注（Set交集）、Feed流（推模式）、SortedSet 滚动分页 | 2026-07-29 |
-| [08 - 附近商铺](./redis/08-附近商铺.md) | GEO 地理位置、GeoHash 编码、GEOSEARCH 半径搜索、9宫格边界处理 | 2026-07-29 |
-| [09 - 用户签到](./redis/09-用户签到.md) | BitMap 位图、签到实现、BITFIELD 连续签到天数计算 | 2026-07-29 |
-| [10 - UV 统计](./redis/10-UV统计.md) | HyperLogLog 概率基数统计、PFADD/PFCOUNT/PFMERGE、UV 合并统计 | 2026-07-29 |
-| [11 - 分布式缓存与最佳实践](./redis/11-分布式缓存与最佳实践.md) | 持久化(RDB/AOF)、主从架构、哨兵模式、Cluster 集群、多级缓存、Big Key/热点 Key | 2026-07-29 |
-| [12 - 底层数据结构](./redis/12-底层数据结构.md) | SDS、ZipList、QuickList、IntSet、SkipList、编码升级、数据类型与底层对应 | 2026-07-29 |
-| [13 - 网络模型与通信协议](./redis/13-网络模型与通信协议.md) | IO多路复用(epoll)、Reactor 模式、6.0 多线程 IO、RESP 协议 | 2026-07-29 |
-| [14 - 内存回收与过期策略](./redis/14-内存回收与过期策略.md) | 惰性删除+定期删除、8种淘汰策略、近似LRU、LFU(对数增长+衰减)、碎片整理 | 2026-07-29 |
+| [07 - 短信登录](./redis/07-短信登录.md) | 短信验证码、Token 机制、Redis 替代 Session、ThreadLocal、双重拦截器 | 2026-07-29 |
 
 ---
 
@@ -96,5 +89,5 @@
 
 - ✅ JavaSE（完整 31 篇笔记）— 全部完结 🎉
 - ✅ JavaWeb（15 篇笔记）— 已完成
-- ✅ Redis（1~14 篇笔记）— 已补全，覆盖实战+高级+原理
+- ✅ Redis（1~7 篇笔记）— 短信登录笔记已补全
 - ⏳ 下一阶段：SpringCloud 微服务 🎯
