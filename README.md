@@ -42,6 +42,9 @@
 | [29 - IO 流进阶（五）· Properties 与压缩流](./JavaSE/29-IO流进阶（五）-Properties与压缩流.md) | Properties 配置文件读写、ZipOutputStream/ZipInputStream 压缩解压、IO 流全体系总结 | 2026-07-28 |
 | [30 - 多线程基础](./JavaSE/30-多线程基础（创建与线程安全）.md) | 三种创建方式（Thread/Runnable/Callable）、线程安全、synchronized/Lock、死锁、等待唤醒、volatile、Atomic | 2026-07-28 |
 | [31 - 多线程进阶](./JavaSE/31-多线程进阶（并发工具与线程池）.md) | 线程池（Executor/ThreadPoolExecutor）、CountDownLatch、CyclicBarrier、Semaphore、阻塞队列、并发集合、ForkJoin | 2026-07-28 |
+| [32 - 网络编程](./JavaSE/32-网络编程（UDP-TCP）.md) | UDP（DatagramSocket）、TCP（Socket/ServerSocket）、三次握手/四次挥手、BS 架构 | 2026-07-30 |
+| [33 - 反射（Reflection）](./JavaSE/33-反射（Reflection）.md) | Class 对象获取、构造器/字段/方法反射、暴力反射、框架应用 | 2026-07-30 |
+| [34 - 动态代理（Proxy）](./JavaSE/34-动态代理（Proxy）.md) | JDK 动态代理（Proxy + InvocationHandler）、AOP 底层、Spring 应用场景 | 2026-07-30 |
 
 ### JavaWeb
 
@@ -91,7 +94,7 @@
 
 ## 📌 学习进度
 
-- ✅ JavaSE（完整 31 篇笔记）— 全部完结 🎉
+- ✅ JavaSE（完整 34 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ Redis（基础篇 + 实战篇共 11 篇笔记）— 实战篇全部完结 🎉
 - ⏳ 下一阶段：SpringCloud 微服务（明天开始） 🎯
