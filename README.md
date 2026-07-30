@@ -74,6 +74,10 @@
 | [05 - 秒杀优化与消息队列](./redis/05-秒杀优化与消息队列.md) | Lua 脚本前置判断、异步下单、Redis 消息队列（List/PubSub/Stream）、消费者组 | 2026-07-08 |
 | [06 - 达人探店](./redis/06-达人探店.md) | 发布探店笔记、图片上传、点赞/取消点赞、SortedSet 点赞排行榜 | 2026-07-09 |
 | [07 - 短信登录](./redis/07-短信登录.md) | 短信验证码、Token 机制、Redis 替代 Session、ThreadLocal、双重拦截器 | 2026-07-29 |
+| [08 - 好友关注](./redis/08-好友关注.md) | 共同关注（Set 交集）、Feed 流推送（SortedSet）、滚动分页 | 2026-07-30 |
+| [09 - 附近商铺](./redis/09-附近商铺.md) | GEO 空间索引、按距离排序、GEOSEARCH 实现 LBS | 2026-07-30 |
+| [10 - 用户签到](./redis/10-用户签到.md) | BitMap 位图签到、BITFIELD 批量读取、连续签到位运算 | 2026-07-30 |
+| [11 - UV 统计](./redis/11-UV统计.md) | HyperLogLog 概率算法、12KB 固定内存、PFADD/PFCOUNT/PFMERGE | 2026-07-30 |
 
 ---
 
@@ -89,5 +93,5 @@
 
 - ✅ JavaSE（完整 31 篇笔记）— 全部完结 🎉
 - ✅ JavaWeb（15 篇笔记）— 已完成
-- ✅ Redis（1~7 篇笔记）— 短信登录笔记已补全
-- ⏳ 下一阶段：SpringCloud 微服务 🎯
+- ✅ Redis（基础篇 + 实战篇共 11 篇笔记）— 实战篇全部完结 🎉
+- ⏳ 下一阶段：SpringCloud 微服务（明天开始） 🎯

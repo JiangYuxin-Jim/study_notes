@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="860" height="1220" viewBox="0 0 860 1220">
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="1310" viewBox="0 0 860 1310">
   <text x="20" y="30" font-size="20" font-weight="650" fill="#172033">📚 学习历程时间线</text>
   <text x="20" y="50" font-size="13" fill="#5b6475">纵轴 = 时间 · 横轴 = 学习板块（往下越长，往后越全）</text>
 
@@ -166,15 +166,22 @@
   <rect x="632" y="1128" width="226" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
   <text x="745" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">📝 补写 Redis 短信登录笔记</text>
 
+  <!-- Row 25: y=1170 -->
+  <line x1="60" y1="1214" x2="860" y2="1214" stroke="#f1f5f9" stroke-width="1"/>
+  <text x="30" y="1197" font-size="12" font-weight="600" fill="#22c55e" text-anchor="middle">7/30</text>
+  <text x="30" y="1210" font-size="9" fill="#94a3b8" text-anchor="middle">周四</text>
+  <rect x="632" y="1172" width="226" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
+  <text x="745" y="1196" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle">🎯 Redis 实战篇完结！好友关注·GEO·签到·UV统计</text>
+
   <!-- 底部进度 -->
-  <line x1="60" y1="1190" x2="860" y2="1190" stroke="#e2e8f0" stroke-width="1"/>
-  <text x="30" y="1210" font-size="12" fill="#5b6475" text-anchor="middle">进度</text>
-  <rect x="80" y="1198" width="10" height="10" rx="2" fill="#3b82f6" opacity="0.85"/>
-  <text x="95" y="1208" font-size="11" fill="#172033">JavaSE ✅ 全部完结</text>
-  <rect x="200" y="1198" width="10" height="10" rx="2" fill="#10b981" opacity="0.85"/>
-  <text x="215" y="1208" font-size="11" fill="#172033">JavaWeb ✅</text>
-  <rect x="300" y="1198" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.85"/>
-  <text x="315" y="1208" font-size="11" fill="#172033">Redis ✅ 7篇笔记</text>
-  <text x="485" y="1208" font-size="11" fill="#5b6475" text-anchor="middle">下一阶段：SpringCloud 微服务 🎯</text>
-  <text x="485" y="1225" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle">🔥 7/29 JavaSE 200集全部学完！</text>
+  <line x1="60" y1="1278" x2="860" y2="1278" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="30" y="1298" font-size="12" fill="#5b6475" text-anchor="middle">进度</text>
+  <rect x="80" y="1286" width="10" height="10" rx="2" fill="#3b82f6" opacity="0.85"/>
+  <text x="95" y="1296" font-size="11" fill="#172033">JavaSE ✅ 全部完结</text>
+  <rect x="200" y="1286" width="10" height="10" rx="2" fill="#10b981" opacity="0.85"/>
+  <text x="215" y="1296" font-size="11" fill="#172033">JavaWeb ✅</text>
+  <rect x="300" y="1286" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.85"/>
+  <text x="315" y="1296" font-size="11" fill="#172033">Redis ✅ 实战篇完结</text>
+  <text x="485" y="1296" font-size="11" fill="#5b6475" text-anchor="middle">下一阶段：SpringCloud 微服务 🎯</text>
+  <text x="485" y="1313" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle">🔥 7/30 Redis实战篇完结！比原计划提前1天</text>
 </svg>
