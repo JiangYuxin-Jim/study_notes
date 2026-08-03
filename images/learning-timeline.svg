@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="860" height="1400" viewBox="0 0 860 1400">
-  <text x="20" y="30" font-size="20" font-weight="650" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">📚 学习历程时间线</text>
+  <text x="20" y="30" font-size="20" font-weight="650" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">学习历程时间线</text>
   <text x="20" y="50" font-size="13" fill="#5b6475" font-family="Noto Sans CJK SC, sans-serif">纵轴 = 时间 · 横轴 = 学习板块（往下越长，往后越全）</text>
 
   <!-- 列：日期(0~60) | JavaSE(70~340,宽270,中心205) | JavaWeb(350~620,宽270,中心485) | Redis(630~860,宽230,中心745) -->
@@ -81,7 +81,7 @@
   <!-- Row 12: y=598 -->
   <text x="30" y="625" font-size="12" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">7/17</text>
   <text x="30" y="638" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">六</text>
-  <text x="205" y="632" font-size="11" fill="#d97706" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">⬇ 7/17-7/18 休息</text>
+  <text x="205" y="632" font-size="11" fill="#d97706" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">7/17-7/18 休息</text>
 
   <!-- Row 13: y=642 -->
   <text x="30" y="669" font-size="12" fill="#cbd5e1" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">7/18</text>
@@ -113,7 +113,7 @@
   <text x="30" y="845" font-size="12" font-weight="600" fill="#172033" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">7/22</text>
   <text x="30" y="858" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">周四</text>
   <rect x="72" y="820" width="266" height="40" rx="5" fill="#3b82f6" opacity="0.95"/>
-  <text x="205" y="844" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">数据结构 · Set 集合 🎉</text>
+  <text x="205" y="844" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">数据结构 · Set 集合 </text>
 
   <!-- Row 18: y=862 -->
   <line x1="60" y1="906" x2="860" y2="906" stroke="#f1f5f9" stroke-width="1"/>
@@ -155,49 +155,49 @@
   <text x="30" y="1109" font-size="12" font-weight="600" fill="#f97316" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">7/28</text>
   <text x="30" y="1122" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">周二</text>
   <rect x="72" y="1084" width="266" height="40" rx="5" fill="#3b82f6" opacity="0.95"/>
-  <text x="205" y="1108" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">🔥 IO 流扫尾 · 多线程/JUC · 网络编程(P110→P168)</text>
+  <text x="205" y="1108" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">IO 流扫尾 · 多线程/JUC · 网络编程(P110→P168)</text>
 
   <!-- Row 24: y=1126 -->
   <line x1="60" y1="1170" x2="860" y2="1170" stroke="#f1f5f9" stroke-width="1"/>
   <text x="30" y="1153" font-size="12" font-weight="600" fill="#22c55e" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">7/29</text>
   <text x="30" y="1166" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">周三</text>
   <rect x="72" y="1128" width="266" height="40" rx="5" fill="#3b82f6" opacity="0.95"/>
-  <text x="205" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">🎉 JavaSE 完结！P168→P200（反射·动态代理）</text>
+  <text x="205" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">JavaSE 完结！P168→P200（反射·动态代理）</text>
   <rect x="632" y="1128" width="226" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
-  <text x="745" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">📝 补写 Redis 短信登录笔记</text>
+  <text x="745" y="1152" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">补写 Redis 短信登录笔记</text>
 
   <!-- Row 25: y=1170 -->
   <line x1="60" y1="1214" x2="860" y2="1214" stroke="#f1f5f9" stroke-width="1"/>
   <text x="30" y="1197" font-size="12" font-weight="600" fill="#22c55e" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">7/30</text>
   <text x="30" y="1210" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">周四</text>
   <rect x="72" y="1172" width="266" height="40" rx="5" fill="#3b82f6" opacity="0.85"/>
-  <text x="205" y="1196" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">📝 补写网络编程·反射·动态代理笔记</text>
+  <text x="205" y="1196" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">补写网络编程·反射·动态代理笔记</text>
   <rect x="632" y="1172" width="226" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
-  <text x="745" y="1196" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">🎯 Redis 实战篇完结！好友关注·GEO·签到·UV统计</text>
+  <text x="745" y="1196" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">Redis 实战篇完结！好友关注·GEO·签到·UV统计</text>
 
   <!-- Row 26: y=1214 -->
   <line x1="60" y1="1258" x2="860" y2="1258" stroke="#f1f5f9" stroke-width="1"/>
   <text x="30" y="1241" font-size="12" font-weight="600" fill="#f59e0b" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">8/2</text>
   <text x="30" y="1254" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">周日</text>
   <rect x="72" y="1216" width="266" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
-  <text x="205" y="1240" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">🚀 Redis 高级篇开始！持久化(RDB·AOF)·主从复制</text>
+  <text x="205" y="1240" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">Redis 高级篇开始！持久化(RDB·AOF)·主从复制</text>
 
   <!-- Row 27: y=1258 -->
   <line x1="60" y1="1302" x2="860" y2="1302" stroke="#f1f5f9" stroke-width="1"/>
   <text x="30" y="1285" font-size="12" font-weight="600" fill="#f59e0b" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">8/3</text>
   <text x="30" y="1298" font-size="9" fill="#94a3b8" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">周一</text>
   <rect x="632" y="1260" width="226" height="40" rx="5" fill="#f59e0b" opacity="0.85"/>
-  <text x="745" y="1284" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">🚀 哨兵(Sentinel)·分片集群(Cluster)</text>
+  <text x="745" y="1284" font-size="11" fill="#ffffff" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">哨兵(Sentinel)·分片集群(Cluster)</text>
 
   <!-- 底部进度 -->
   <line x1="60" y1="1322" x2="860" y2="1322" stroke="#e2e8f0" stroke-width="1"/>
   <text x="30" y="1342" font-size="12" fill="#5b6475" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">进度</text>
   <rect x="80" y="1330" width="10" height="10" rx="2" fill="#3b82f6" opacity="0.85"/>
-  <text x="95" y="1340" font-size="11" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">JavaSE ✅ 全部完结</text>
+  <text x="95" y="1340" font-size="11" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">JavaSE  全部完结</text>
   <rect x="200" y="1330" width="10" height="10" rx="2" fill="#10b981" opacity="0.85"/>
-  <text x="215" y="1340" font-size="11" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">JavaWeb ✅</text>
+  <text x="215" y="1340" font-size="11" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">JavaWeb </text>
   <rect x="300" y="1330" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.85"/>
-  <text x="315" y="1340" font-size="11" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">Redis 🔄 高级篇进行中（11+3 篇）</text>
-  <text x="485" y="1340" font-size="11" fill="#5b6475" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">下一阶段：SpringCloud 微服务 🎯</text>
-  <text x="485" y="1357" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">🔥 8/3 主从·哨兵·分片集群，高级篇高可用/扩展收尾</text>
+  <text x="315" y="1340" font-size="11" fill="#172033" font-family="Noto Sans CJK SC, sans-serif">Redis  高级篇进行中（11+3 篇）</text>
+  <text x="485" y="1340" font-size="11" fill="#5b6475" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">下一阶段：SpringCloud 微服务 </text>
+  <text x="485" y="1357" font-size="11" fill="#f97316" font-weight="600" text-anchor="middle" font-family="Noto Sans CJK SC, sans-serif">8/3 主从·哨兵·分片集群，高级篇高可用/扩展收尾</text>
 </svg>
