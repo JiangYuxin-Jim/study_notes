@@ -91,7 +91,7 @@
 
 > 从上到下按时间排列，每天学什么一目了然。
 
-<img alt="学习历程时间线" src="./images/learning-timeline.svg" width="100%">
+<img alt="学习历程时间线" src="./images/learning-timeline.png" width="100%">
 
 ---
 
