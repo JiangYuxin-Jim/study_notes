@@ -45,6 +45,7 @@
 | [32 - 网络编程](./JavaSE/32-网络编程（UDP-TCP）.md) | UDP（DatagramSocket）、TCP（Socket/ServerSocket）、三次握手/四次挥手、BS 架构 | 2026-07-30 |
 | [33 - 反射（Reflection）](./JavaSE/33-反射（Reflection）.md) | Class 对象获取、构造器/字段/方法反射、暴力反射、框架应用 | 2026-07-30 |
 | [34 - 动态代理（Proxy）](./JavaSE/34-动态代理（Proxy）.md) | JDK 动态代理（Proxy + InvocationHandler）、AOP 底层、Spring 应用场景 | 2026-07-30 |
+| [35 - 继承（Inheritance）](./JavaSE/35-继承（Inheritance）.md) | extends、super、方法重写 vs 重载、构造流程、final、Object、抽象类、继承 vs 组合 | 2026-08-04 |
 
 ### JavaWeb
 
@@ -115,12 +116,13 @@
 | 7/30 | 补写网络编程·反射·动态代理笔记 | — | 实战篇完结（好友关注·GEO·签到·UV统计） |
 | 8/2 | — | — | 高级篇开始：持久化(RDB·AOF)·主从复制 |
 | 8/3 | — | — | 高级篇：哨兵 · 分片集群 |
+| 8/4 | — | 补写继承笔记（extends·super·重写·抽象类） | — |
 
 ---
 
 ## 📌 学习进度
 
-- ✅ JavaSE（完整 34 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理）
+- ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - 🔄 Redis（基础 + 实战 + 高级篇进行中）— 实战篇已完结，高级篇从持久化·主从复制·哨兵·分片集群（11+3 篇）
 - ⏳ 下一阶段：SpringCloud 微服务（紧跟高级篇之后） 🎯
