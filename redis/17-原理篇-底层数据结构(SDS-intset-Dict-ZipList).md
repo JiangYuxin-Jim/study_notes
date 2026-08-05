@@ -1,8 +1,8 @@
-# 17 - Redis 原理篇：底层数据结构（SDS / intset / Dict / ZipList / QuickList / SkipList / RedisObject）
+# 17 - Redis 原理篇：底层数据结构（SDS / intset / Dict / ZipList）
 
 > 📅 2026-08-05 | 🏷️ Redis / 原理篇 / 数据结构 / 底层实现
 
-> 说明：本系列为 Redis **原理篇**的第一部分「数据结构」。已学到第 160 集（ZipList 压缩列表）。本篇按课程讲义整理底层各数据结构：SDS、intset、Dict、ZipList、QuickList、SkipList、RedisObject。网络模型、通信协议、内存回收等后续学到再补。
+> 说明：本系列为 Redis **原理篇**的第一部分「数据结构」。已学到第 160 集（ZipList 压缩列表）。本篇按课程讲义整理已学部分：SDS、intset、Dict、ZipList（含连锁更新）。QuickList、SkipList、RedisObject、网络模型、通信协议、内存回收等后续学到再补。
 
 > ⚠️ 版本说明：本课程基于 **Redis 6.x**（RESP2 协议时代），List 底层为 QuickList（节点是 ZipList），**尚未引入 Redis 7.0 的 listpack** 替换。
 
@@ -187,89 +187,11 @@ entry1{...253字节} entry2{prevlen:1字节 ...253字节} entry3{prevlen:1字节
 
 ---
 
-## 五、QuickList — List 的底层（3.2 版本后）
-
-**问题背景**：
-1. ZipList 省内存，但**申请内存必须连续**，占用较多时申请效率低 → 需限制 ZipList 长度和 entry 大小。
-2. 要存储大量数据，超 ZipList 上限怎么办？→ 创建**多个 ZipList 分片存储**。
-3. 多个 ZipList 分散，如何管理和查找？→ 用**双端链表**把它们串起来。
-
-**QuickList = 双端链表 + 每个节点是一个 ZipList**（Redis 3.2 引入）。
-
-### 控制 ZipList 大小
-配置项 `list-max-ziplist-size`：
-- 值为**正**：每个 ZipList 允许的最大 **entry 个数**。
-- 值为**负**：每个 ZipList 的最大**内存大小**（5 档）：
-  - -1：≤ 4kb
-  - -2：≤ 8kb
-  - -3：≤ 16kb
-  - -4：≤ 32kb
-  - -5：≤ 64kb
-- **默认值 -2**（每个 ZipList ≤ 8kb）。
-
-### QuickList 特点小结
-- 是节点为 ZipList 的**双端链表**。
-- 节点用 ZipList，解决了传统链表的**内存占用**问题。
-- 控制了 ZipList 大小，解决**连续内存申请效率**问题。
-- **中间节点可以压缩**，进一步节省内存。
-
----
-
-## 六、SkipList（跳表）— ZSet 底层
-
-SkipList（跳表）本质是**链表**，但与传统链表不同：
-- 元素**按升序排列**存储。
-- 节点可能包含**多个指针**，指针跨度不同（层级高、跨度大）。
-
-### 特点小结
-- 是一个**双向链表**，每个节点包含 **score** 和 **ele** 值。
-- 节点按 **score 排序**，score 相同则按 ele **字典序**排序。
-- 每个节点可包含**多层指针**，层数是 **1 到 32 之间的随机数**。
-- 不同层指针到下一节点跨度不同，**层级越高跨度越大**。
-- 增删改查效率与**红黑树基本一致**，但**实现更简单**。
-
----
-
-## 七、RedisObject（Redis 对象）— 所有 value 的通用封装
-
-Redis 中任意数据类型的**键和值**都会被封装为一个 **RedisObject（robj）**。
-
-> 为什么需要：Redis 的 key 固定是 string（SDS），但 value 可以是多种类型（string/list/hash/set/zset）。为了在同一个 dict 里存不同类型，需要一个**通用的数据结构**来承载，这就是 robj。
-
-### 编码方式（11 种）
-| 编号 | 编码 | 说明 |
-|------|------|------|
-| 0 | OBJ_ENCODING_RAW | raw 编码动态字符串 |
-| 1 | OBJ_ENCODING_INT | long 类型整数的字符串 |
-| 2 | OBJ_ENCODING_HT | 哈希表（dict） |
-| 3 | OBJ_ENCODING_ZIPMAP | 已废弃 |
-| 4 | OBJ_ENCODING_LINKEDLIST | 双端链表 |
-| 5 | OBJ_ENCODING_ZIPLIST | 压缩列表 |
-| 6 | OBJ_ENCODING_INTSET | 整数集合 |
-| 7 | OBJ_ENCODING_SKIPLIST | 跳表 |
-| 8 | OBJ_ENCODING_EMBSTR | embstr 动态字符串 |
-| 9 | OBJ_ENCODING_QUICKLIST | 快速列表 |
-| 10 | OBJ_ENCODING_STREAM | Stream 流 |
-
-### 各数据类型可能的编码
-| 数据类型 | 编码方式 |
-|----------|---------|
-| OBJ_STRING | int、embstr、raw |
-| OBJ_LIST | LinkedList 和 ZipList（3.2 前）、QuickList（3.2 后） |
-| OBJ_SET | intset、HT |
-| OBJ_ZSET | ZipList、HT、SkipList |
-| OBJ_HASH | ZipList、HT |
-
-> 编码方式由 `OBJECT ENCODING key` 查看，体现"小数据用紧凑编码、大数据用高效结构"的自动切换策略。
-
----
-
-## 八、核心要点速记
+## 五、核心要点速记
 
 - **SDS**：String 底层，记录 len/alloc → O(1) 取长度、二进制安全、可扩容；超过 1MB 空间预分配规则。
 - **IntSet**：Set 的全整数底层，有序唯一、二分查找、可升级编码省内存（不能降级）。
 - **Dict**：数组+链表，两个哈希表 ht[0]/ht[1]；LoadFactor ≥1（无子进程）或 >5 扩容，<0.1 收缩；**渐进式 rehash**，rehash 期间新增只写 ht[1]。
 - **ZipList**：连续内存"双端链表"，无指针靠 prevlen 寻址省内存；entry = `prevlen|encoding|contents`；**连锁更新**（插/删大节点引发一串扩展，最坏 O(N²)）；增删大节点有隐患。
-- **QuickList**：List 底层，双端链表+每节点一个 ZipList，`list-max-ziplist-size` 控制（默认 -2 即 8kb）。
-- **SkipList**：ZSet 底层，按 score 升序、多层指针（1~32 随机层）、查询快、实现比红黑树简单。
-- **RedisObject**：所有 value 的通用封装，11 种编码，按类型+数据规模自动选编码（少而小→紧凑，多而大→高效）。
+
+> 📌 后续 QuickList、SkipList、RedisObject 等学到再补充。
