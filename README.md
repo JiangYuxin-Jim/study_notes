@@ -87,7 +87,7 @@
 | [14 - 哨兵与分片集群](./redis/14-哨兵与分片集群.md) | 哨兵高可用、自动故障转移、Cluster 槽位分片、MOVED/ASK、多级缓存 | 2026-08-03 |
 | [15 - 多级缓存](./redis/15-多级缓存.md) | Caffeine 进程缓存、Lua/OpenResty、Nginx 本地缓存、缓存预热、Canal 缓存同步 | 2026-08-04 |
 | [16 - Redis 最佳实践](./redis/16-Redis最佳实践.md) | 键值设计、BigKey 问题与治理、数据结构选择 | 2026-08-04 |
-| [17 - 原理篇·数据结构（ziplist 与 listpack）](./redis/17-原理篇-数据结构(ziplist与listpack).md) | 压缩列表 ziplist 布局、连锁更新问题、listpack 替换、quicklist、intset | 2026-08-05 |
+| [17 - 原理篇·底层数据结构（SDS/intset/Dict/ZipList/QuickList/SkipList/RedisObject）](./redis/17-原理篇-底层数据结构(SDS-intset-Dict-ZipList-QuickList-SkipList-RedisObject).md) | SDS 动态字符串、IntSet 整数集合、Dict、ZipList 连锁更新、QuickList、SkipList、RedisObject 编码 | 2026-08-05 |
 
 ---
 
@@ -120,7 +120,7 @@
 | 8/2 | — | — | 高级篇开始：持久化(RDB·AOF)·主从复制 |
 | 8/3 | — | — | 高级篇：哨兵 · 分片集群 |
 | 8/4 | 补写继承笔记（extends·super·重写·抽象类） | — | 多级缓存（Caffeine·OpenResty·Canal） · 最佳实践（键值/BigKey） |
-| 8/5 | — | — | 原理篇开始：数据结构（ziplist 压缩列表 · listpack）P160 |
+| 8/5 | — | — | 原理篇开始：数据结构（SDS·intset·Dict·ZipList·QuickList·SkipList·RedisObject）P160 |
 
 ---
 
@@ -128,5 +128,5 @@
 
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
-- 🔄 Redis（基础 + 实战 + 高级篇 + 原理篇）— 实战篇已完结；高级篇（持久化·主从·哨兵·集群·多级缓存·最佳实践）已完结；原理篇数据结构开始，已学到第 160 集，剩约 15 集收尾
-- ⏳ 下一阶段：Redis 原理篇收尾（listpack·网络模型·通信协议·内存回收）→ SpringCloud 微服务 🎯
+- 🔄 Redis（基础 + 实战 + 高级篇 + 原理篇）— 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅；原理篇数据结构开始，已学到第 160 集，剩约 15 集收尾
+- ⏳ 下一阶段：Redis 原理篇收尾（网络模型·RESP协议·内存回收）→ SpringCloud 微服务 🎯
