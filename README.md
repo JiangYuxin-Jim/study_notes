@@ -99,7 +99,9 @@
 
 | 序号 | 内容 | 完成时间 |
 |------|------|----------|
-| [板块说明与学习路线](./ai/README.md) | all-in-rag（RAG 9章）+ hello-agents（Agent 16章），Python + Java 双修 | 2026-08-07 |
+| [板块说明与学习路线](./ai/README.md) | hello-agents（Agent 16章）+ all-in-rag（RAG 9章），Python + Java 双修 | 2026-08-07 |
+| [hello-agents 01 · 初识智能体(理论基础)](./ai/hello-agents/01-初识智能体(理论基础).md) | Agent 定义、传统演进、LLM 新范式、分类维度、PEAS、Agent Loop、TAO | 2026-08-07 |
+| [hello-agents 02 · 动手实现第一个智能体](./ai/hello-agents/02-动手实现第一个智能体与协作模式.md) | Python 旅行助手（提示词+工具+LLM客户端+主循环）、协作模式 | 2026-08-07 |
 
 ---
 
@@ -135,7 +137,7 @@
 | 8/5 | — | — | 原理篇开始：数据结构（SDS·intset·Dict·ZipList）P160；补充最佳实践（批处理/服务端/集群） |
 | 8/6 | — | — | 原理篇：网络模型（IO多路复用 select/poll/epoll·事件驱动 Reactor·6.0 多线程IO） |
 | 8/7 | — | — | 🎉 Redis 全课程完结！原理篇收尾：通信协议(RESP) · 内存回收（过期删除·淘汰策略·LRU） |
-| 8/7 | — | — | 新主线开启：all-in-rag（RAG 全栈）· hello-agents（智能体），克隆仓库并入学习 |
+| 8/7 | — | — | 新主线开启：hello-agents（Agent）· all-in-rag（RAG），克隆仓库入学习；完成 hello-agents 第一章（初识智能体·动手实现旅行助手） |
 
 ---
 
@@ -144,5 +146,5 @@
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- 🔄 **AI 智能体与 RAG（新主线，优先）** — all-in-rag（RAG 全栈 9 章）✅clone → 学习中；hello-agents（智能体 16 章）✅clone → 待学
-- ⏳ 下一阶段：all-in-rag（RAG）→ hello-agents（Agent）→ 穿插 SpringCloud 微服务 🎯
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章完成(理论+动手)；all-in-rag（RAG 9章）✅clone → 待学
+- ⏳ 下一阶段：hello-agents（Agent）→ all-in-rag（RAG）→ 穿插 SpringCloud 微服务 🎯
