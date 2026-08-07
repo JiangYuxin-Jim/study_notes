@@ -93,6 +93,14 @@
 | [20 - 原理篇·通信协议（RESP）](./redis/20-原理篇-通信协议(RESP).md) | RESP 五种类型、命令/返回编码、手写简易客户端、RESP3 | 2026-08-07 |
 | [21 - 原理篇·内存回收](./redis/21-原理篇-内存回收.md) | 惰性/定期删除、maxmemory 淘汰策略、LRU vs LFU、手写 LRU | 2026-08-07 |
 
+### AI 智能体与 RAG
+
+> 详见板块说明：[ai/README.md](./ai/README.md) · 本地项目：`/home/admin/ai_projects/`
+
+| 序号 | 内容 | 完成时间 |
+|------|------|----------|
+| [板块说明与学习路线](./ai/README.md) | all-in-rag（RAG 9章）+ hello-agents（Agent 16章），Python + Java 双修 | 2026-08-07 |
+
 ---
 
 ## 📊 学习历程时间线
@@ -127,6 +135,7 @@
 | 8/5 | — | — | 原理篇开始：数据结构（SDS·intset·Dict·ZipList）P160；补充最佳实践（批处理/服务端/集群） |
 | 8/6 | — | — | 原理篇：网络模型（IO多路复用 select/poll/epoll·事件驱动 Reactor·6.0 多线程IO） |
 | 8/7 | — | — | 🎉 Redis 全课程完结！原理篇收尾：通信协议(RESP) · 内存回收（过期删除·淘汰策略·LRU） |
+| 8/7 | — | — | 新主线开启：all-in-rag（RAG 全栈）· hello-agents（智能体），克隆仓库并入学习 |
 
 ---
 
@@ -135,4 +144,5 @@
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- ⏳ 下一阶段：**SpringCloud 微服务（BV1S142197x7）** 🎯
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — all-in-rag（RAG 全栈 9 章）✅clone → 学习中；hello-agents（智能体 16 章）✅clone → 待学
+- ⏳ 下一阶段：all-in-rag（RAG）→ hello-agents（Agent）→ 穿插 SpringCloud 微服务 🎯
