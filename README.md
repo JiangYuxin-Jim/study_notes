@@ -105,6 +105,7 @@
 | [hello-agents 03 · 大语言模型基础](./ai/hello-agents/03-大语言模型基础.md) | N-gram→RNN/LSTM→Transformer→Decoder-Only、采样参数、提示工程、BPE 分词、本地部署 Qwen、模型选型、缩放法则与幻觉 | 2026-08-11 |
 | [hello-agents 06 · 框架开发实践](./ai/hello-agents/06-框架开发实践.md) | AutoGen/AgentScope/CAMEL/LangGraph 四大框架：对话驱动·消息驱动/工程化·角色扮演·图式状态机，实战案例 + 选型分析 | 2026-08-13 |
 | [hello-agents 07 · 构建你的Agent框架](./ai/hello-agents/07-构建你的Agent框架.md) | 自建框架理念(轻量+万物皆为工具)、HelloAgentsLLM多提供商/本地模型/自动检测、Message·Config·Agent抽象基类、五种范式实现(Simple/ReAct/Reflection/PlanAndSolve/FunctionCall)、统一工具系统 | 2026-08-14 |
+| [hello-agents 08 · 记忆与检索](./ai/hello-agents/08-记忆与检索.md) | 四种记忆(工作/情景/语义/感知)+MemoryManager添加·检索·整合·遗忘、RAG"五层七步"架构+Markitdown统一转换+向量库检索增强、智能文档问答助手综合实战 | 2026-08-18 |
 
 ---
 
@@ -144,6 +145,7 @@
 | 8/11 | — | — | hello-agents 第三章 大语言模型基础（N-gram→RNN→Transformer→Decoder-Only、提示工程、分词 BPE、模型选型、缩放法则与幻觉） |
 | 8/13 | — | — | hello-agents 第六章 框架开发实践（AutoGen·AgentScope·CAMEL·LangGraph 四大框架，核心实战 AgentScope 消息驱动/三国狼人杀、CAMEL 角色扮演/电子书、LangGraph 图式状态机/三步问答助手） |
 | 8/14 | — | — | hello-agents 第七章 构建你的Agent框架（自建轻量框架理念/万物皆为工具、HelloAgentsLLM多提供商封装、Message·Config·Agent抽象基类、五种Agent范式·统一工具系统） |
+| 8/18 | — | — | hello-agents 第八章 记忆与检索（四种记忆·MemoryManager、RAG五层七步架构·向量库检索增强、智能文档问答助手实战；补看 learn Claude Code） |
 
 ---
 
@@ -152,5 +154,5 @@
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架)；all-in-rag（RAG 9章）✅clone → 待学
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学
 - ⏳ 下一阶段：hello-agents 第二章（智能体发展史）→ 后续章节 → all-in-rag（RAG）→ 天机学堂（Java/Spring AI 落地） 🎯
