@@ -65,6 +65,7 @@
 | 工具 | 主题 | 笔记 | 完成时间 |
 |------|------|------|----------|
 | Zotero | 文献管理·基础使用 | [zotero-基础使用](./tools/zotero-基础使用.md) | 2026-08-29 |
+| Learn Claude Code | 前三章：Agent Loop / 工具调用 / 三层权限隔离 | [learn-claude-code-前三章](./tools/learn-claude-code-前三章.md) | 2026-09-17 |
 
 ---
 

@@ -107,6 +107,7 @@
 | [hello-agents 07 · 构建你的Agent框架](./ai/hello-agents/07-构建你的Agent框架.md) | 自建框架理念(轻量+万物皆为工具)、HelloAgentsLLM多提供商/本地模型/自动检测、Message·Config·Agent抽象基类、五种范式实现(Simple/ReAct/Reflection/PlanAndSolve/FunctionCall)、统一工具系统 | 2026-08-14 |
 | [hello-agents 08 · 记忆与检索](./ai/hello-agents/08-记忆与检索.md) | 四种记忆(工作/情景/语义/感知)+MemoryManager添加·检索·整合·遗忘、RAG"五层七步"架构+Markitdown统一转换+向量库检索增强、智能文档问答助手综合实战 | 2026-08-18 |
 | [Zotero 文献管理·基础使用](./ai/tools/zotero-基础使用.md) | 文献库/分类集/标签/附件/笔记、网页抓取·DOI导入、PDF阅读高亮、Word插件自动引用与参考文献、引文格式切换、同步备份 | 2026-08-29 |
+| [Learn Claude Code · 前三章](./ai/tools/learn-claude-code-前三章.md) | Agent Loop（TAO 循环工程化·终止条件·上下文累加）、工具调用（name/description/schema + 提议→权限→执行→结果回灌）、三层权限隔离（工具白名单→参数级校验→人工确认） | 2026-09-17 |
 
 ---
 
@@ -148,6 +149,7 @@
 | 8/14 | — | — | hello-agents 第七章 构建你的Agent框架（自建轻量框架理念/万物皆为工具、HelloAgentsLLM多提供商封装、Message·Config·Agent抽象基类、五种Agent范式·统一工具系统） |
 | 8/18 | — | — | hello-agents 第八章 记忆与检索（四种记忆·MemoryManager、RAG五层七步架构·向量库检索增强、智能文档问答助手实战；补看 learn Claude Code） |
 | 8/29 | — | — | Zotero 文献管理·基础使用（文献库/分类集/标签、网页抓取·DOI导入、PDF阅读高亮、Word插件自动引用·参考文献、引文格式切换、同步备份） |
+| 9/17 | — | — | Learn Claude Code 前三章（Agent Loop 循环工程化·工具调用 name/description/schema·三层权限隔离：白名单→参数校验→人工确认） |
 
 ---
 
@@ -156,5 +158,5 @@
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具** ✅Zotero 文献管理基础（ai/tools/）
-- ⏳ 下一阶段：hello-agents 第二章（智能体发展史）→ 后续章节 → all-in-rag（RAG）→ 天机学堂（Java/Spring AI 落地） 🎯
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前三章（ai/tools/）
+- ⏳ 下一阶段：hello-agents 第九章（上下文工程）→ 后续章节 → all-in-rag（RAG）→ 天机学堂（Java/Spring AI 落地） 🎯
