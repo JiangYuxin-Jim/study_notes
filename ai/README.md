@@ -66,6 +66,7 @@
 |------|------|------|----------|
 | Zotero | 文献管理·基础使用 | [zotero-基础使用](./tools/zotero-基础使用.md) | 2026-08-29 |
 | Learn Claude Code | 前三章：Agent Loop / 工具调用 / 三层权限隔离 | [learn-claude-code-前三章](./tools/learn-claude-code-前三章.md) | 2026-09-17 |
+| Learn Claude Code | 第四章：钩子函数（Hooks / 生命周期事件 / 权限接管） | [learn-claude-code-04-钩子函数](./tools/learn-claude-code-04-钩子函数.md) | 2026-09-18 |
 
 ---
 
