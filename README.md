@@ -109,6 +109,7 @@
 | [Zotero 文献管理·基础使用](./ai/tools/zotero-基础使用.md) | 文献库/分类集/标签/附件/笔记、网页抓取·DOI导入、PDF阅读高亮、Word插件自动引用与参考文献、引文格式切换、同步备份 | 2026-08-29 |
 | [Learn Claude Code · 前三章](./ai/tools/learn-claude-code-前三章.md) | Agent Loop（TAO 循环工程化·终止条件·上下文累加）、工具调用（name/description/schema + 提议→权限→执行→结果回灌）、三层权限隔离（工具白名单→参数级校验→人工确认） | 2026-09-17 |
 | [Learn Claude Code · 第四章 钩子函数](./ai/tools/learn-claude-code-04-钩子函数.md) | Hooks 生命周期事件（Session/每轮/每工具调用）、三层配置结构（事件+matcher+handler）、5 种 handler、退出码 0/2 与 JSON 输出、权限接管（PreToolUse 四决策 allow/deny/ask/defer + PermissionRequest 写权限规则）、实战：拦截 rm / 自动 prettier 格式化 | 2026-09-18 |
+| [Learn Claude Code · 第五章 TodoWrite](./ai/tools/learn-claude-code-05-todowrite.md) | 任务清单（元工具：只写自身状态不改外部世界，Permission=No）、Agent Loop 中的规划位、四态生命周期（pending/in_progress/completed/deleted）、建清单的四类场景、SDK 里的 tool_use 流（TaskCreate/TaskUpdate、ID 要靠 tool_result 回带、字段名防御式解析、activeForm vs subject）、模型可用性反直觉事实（新模型默认不提供，能力内化后撤工具省 context）、终端 Ctrl+T / 跨压缩存活 / CLAUDE_CODE_TASK_LIST_ID 跨会话共享 | 2026-09-20 |
 
 ---
 
@@ -152,6 +153,7 @@
 | 8/29 | — | — | Zotero 文献管理·基础使用（文献库/分类集/标签、网页抓取·DOI导入、PDF阅读高亮、Word插件自动引用·参考文献、引文格式切换、同步备份） |
 | 9/17 | — | — | Learn Claude Code 前三章（Agent Loop 循环工程化·工具调用 name/description/schema·三层权限隔离：白名单→参数校验→人工确认） |
 | 9/18 | — | — | Learn Claude Code 第四章 钩子函数（生命周期事件三类粒度、三层配置结构、5 种 handler、退出码 0/2、PreToolUse 四决策与 PermissionRequest 权限接管、实战拦截 rm 与自动格式化） |
+| 9/20 | — | — | Learn Claude Code 第五章 TodoWrite（元工具定位·Permission=No、四态生命周期、SDK tool_use 流与防御式解析、模型可用性：新模型默认不提供 TodoWrite 改给 Task 四件套、Ctrl+T/跨压缩存活/TASK_LIST_ID 跨会话共享） |
 
 ---
 
@@ -160,5 +162,5 @@
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前三章 + 第四章钩子函数（ai/tools/）
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前三章 + 第四章钩子函数 + 第五章 TodoWrite（ai/tools/）
 - ⏳ 下一阶段：hello-agents 第九章（上下文工程）→ 后续章节 → all-in-rag（RAG）→ 天机学堂（Java/Spring AI 落地） 🎯
