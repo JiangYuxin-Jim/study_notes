@@ -70,6 +70,7 @@
 | Learn Claude Code | 第五章：TodoWrite（任务清单 / 四态生命周期 / 提醒机制 / 模型可用性） | [learn-claude-code-05-todowrite](./tools/learn-claude-code-05-todowrite.md) | 2026-09-20 |
 | Learn Claude Code | 第六章：Subagent 与 Skill 加载（上下文隔离 / 按需加载 / 成本模型） | [learn-claude-code-06-subagent与skill加载](./tools/learn-claude-code-06-subagent与skill加载.md) | 2026-09-21 |
 | Learn Claude Code | 第七章：上下文压缩（四级降级 / 首尾保留 / 引用化 / LLM 摘要兜底） | [learn-claude-code-07-上下文压缩](./tools/learn-claude-code-07-上下文压缩.md) | 2026-09-22 |
+| Learn Claude Code | 第八章：记忆系统（LLM 无状态 / 分层记忆 / CLAUDE.md 显式长期记忆 / 与压缩配合） | [learn-claude-code-08-记忆系统](./tools/learn-claude-code-08-记忆系统.md) | 2026-10-04 |
 
 ---
 
