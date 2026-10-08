@@ -72,7 +72,10 @@
 | Learn Claude Code | 第七章：上下文压缩（四级降级 / 首尾保留 / 引用化 / LLM 摘要兜底） | [learn-claude-code-07-上下文压缩](./tools/learn-claude-code-07-上下文压缩.md) | 2026-09-22 |
 | Learn Claude Code | 第八章：记忆系统（LLM 无状态 / 分层记忆 / CLAUDE.md 显式长期记忆 / 与压缩配合） | [learn-claude-code-08-记忆系统](./tools/learn-claude-code-08-记忆系统.md) | 2026-10-04 |
 | LangChain | 一：模型调用与消息体系（init_chat_model 统一初始化 / 六种调用方式 / model_kwargs·extra_body / LangSmith / AIMessage·ToolMessage） | [langchain-01-模型调用与消息体系](./tools/langchain-01-模型调用与消息体系.md) | 2026-10-06 |
+
 | LangChain | 二：工具调用 Tool Use（@tool 三要素 / StructuredTool / 模型只提议不执行·bind_tools / 手动回路与 ToolMessage 回灌 / create_agent 内置循环 / MVTS） | [langchain-02-tool-use](./tools/langchain-02-tool-use.md) | 2026-10-08 |
+| LangChain | 三：结构化输出（with_structured_output / Pydantic Schema 设计 / 底层 Function Calling / 校验与兜底） | [langchain-03-structured-output](./tools/langchain-03-structured-output.md) | 2026-10-08 |
+| LangChain | 四：Agent（create_agent / ReAct → 原生 Function Calling / 内部图结构 / Middleware / checkpointer 记忆 / HITL） | [langchain-04-agents](./tools/langchain-04-agents.md) | 2026-10-08 |
 
 ---
 
