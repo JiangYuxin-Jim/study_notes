@@ -113,6 +113,7 @@
 | [Learn Claude Code · 第六章 Subagent 与 Skill 加载](./ai/tools/learn-claude-code-06-subagent与skill加载.md) | Subagent（隔离上下文窗口·只回摘要、内置 Explore/Plan/general-purpose、五级作用域、frontmatter 全字段、自动委派与 @提及、前台后台与 fork 模式、启动时加载什么、Resume）、Skill（描述常驻+正文按需、Reference vs Task、frontmatter、内容生命周期与压缩预算、allowed-tools 安全提醒、context: fork、Skill↔Subagent 双向组合）、上下文成本总表与选型 | 2026-09-21 |
 | [Learn Claude Code · 第七章 上下文压缩](./ai/tools/learn-claude-code-07-上下文压缩.md) | 四级降级策略（从轻到重）：①工具调用结果压缩（超长直接截断只留前部）②消息数量压缩（超阈值如50条，保留头3条+尾47条、掐中间）③消息内容压缩（老工具结果→文件路径引用化，不够再压新结果）④LLM 摘要兜底（输入按前 1/4 + 后 3/4 裁剪）；核心直觉：头尾优先·能机械别调LLM·缓存降级为外存 | 2026-09-22 |
 | [Learn Claude Code · 第八章 记忆系统](./ai/tools/learn-claude-code-08-记忆系统.md) | LLM 无状态→记忆纯属工程问题（上下文内 vs 上下文外）；四层记忆（工作/会话/长期文件/外部知识）；CLAUDE.md 显式长期记忆（常驻订阅制·按轮计费）；自动记忆=把上下文外化成文件；与第七章压缩互补（先落盘再压缩）；设计要点：写什么/何时写/何时读/冲突处理/成本意识 | 2026-10-04 |
+| [LangChain · 二 工具调用 Tool Use](./ai/tools/langchain-02-tool-use.md) | `@tool` 装饰器（函数名/docstring/类型注解 = name·description·args_schema 三要素）与 `StructuredTool`（Pydantic 精控参数）；**模型只提议不执行**——`bind_tools()` 本质是把工具 JSON Schema 预绑定进每次请求，返回 AIMessage 带 `tool_calls`（可多个·含 id）；手动回路四步（invoke→执行→`ToolMessage(tool_call_id=...)` 回灌→再 invoke）；`create_agent` 封装决策-执行-回灌循环（入出参均为 messages）；工具集臃肿=吃掉上下文预算 → MVTS 最小可行工具集 | 2026-10-08 |
 | [LangChain · 一 模型调用与消息体系](./ai/tools/langchain-01-模型调用与消息体系.md) | `init_chat_model()` 统一初始化（provider:model·模型代码解耦）；六种调用 invoke/ainvoke/stream/astream/batch/abatch（batch 更快但同步阻塞·异步需 abatch）；`model_kwargs` vs `extra_body`（模型字段 vs 厂商私有扩展如 DeepSeek thinking）；LangSmith 四大能力（tracing/monitoring/debug/evaluate）；AIMessage 特有 response_metadata·tool_calls（可多个）+ ToolMessage 的 tool_call_id 必须与 tool_calls[].id 配对 | 2026-10-06 |
 
 ---
@@ -162,6 +163,7 @@
 | 9/22 | — | — | Learn Claude Code 第七章 上下文压缩（四级降级：①工具结果截断 ②消息数量压缩（头3+尾47、掐中间）③消息内容压缩（老结果→文件路径引用化、再压新结果）④LLM 摘要兜底（输入按前1/4+后3/4裁剪）；与第六章构成「事前预防 + 事后补救」上下文管理闭环） |
 | 10/4 | — | — | Learn Claude Code 第八章 记忆系统（LLM 无状态→记忆=工程问题：上下文内工作/会话记忆 + 上下文外长期文件/外部知识；CLAUDE.md 显式长期记忆·按轮计费；自动记忆=上下文外化为文件；与上下文压缩互补——重要信息先落盘再压缩；设计心法：该记的记·该忘的忘·该想起来时想得起来） |
 | 10/6 | — | — | LangChain（一）模型调用与消息体系（init_chat_model 统一初始化 provider:model / 六种调用 invoke·ainvoke·stream·astream·batch·abatch：batch 更快但同步阻塞改成 abatch / 额外参数 model_kwargs 与 extra_body（DeepSeek thinking）/ LangSmith 可观测平台 tracing·monitoring·debug·evaluate / AIMessage 特有 response_metadata 与 tool_calls + ToolMessage 靠 tool_call_id 配对） |
+| 10/8 | — | — | LangChain（二）工具调用 Tool Use（`@tool` 三要素·`StructuredTool`；**模型只提议不执行**：`bind_tools` 把 schema 预绑定进请求、AIMessage 带 tool_calls；手动回路 invoke→执行→ToolMessage 回灌→再 invoke；`create_agent` 内置循环；工具 schema 占上下文 → MVTS） |
 
 ---
 
@@ -170,5 +172,5 @@
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系（ai/tools/）
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系 · ✅LangChain（二）工具调用 Tool Use（ai/tools/）
 - ⏳ 下一阶段：hello-agents 第九章（上下文工程）→ 后续章节 → all-in-rag（RAG）→ 天机学堂（Java/Spring AI 落地） 🎯
