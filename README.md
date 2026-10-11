@@ -118,6 +118,7 @@
 | [LangChain · 五 中间件 Middleware](./ai/tools/langchain-05-middleware.md) | **Middleware = Agent 的 AOP**（把日志/压缩/审批/重试/限流/脱敏从 agent 本体剥成可插拔一层）；六大钩子：node-style（`before/after_agent`·`before/after_model`，顺序执行·改 state·可 `jump_to`）vs wrap-style（`wrap_model_call`·`wrap_tool_call`，包住调用·可控制调用 0/1/N 次·直接 `request.override()`）；装饰器 vs 类（类可声明 `state_schema`/`tools`/`transformers`）；state 更新差异（node 直接 return dict，wrap 要 `ExtendedModelResponse`+`Command`）；执行顺序 before 正序·after 逆序·wrap 嵌套；内置库全览（Retry/Fallback·Summarization·HITL·PII·CallLimit·TodoList·SubAgent·Filesystem·LLMToolSelector·ContextEditing）；实战四例：动态 prompt·动态模型·动态工具集·工具监控；**HITL 必须配 checkpointer** | 2026-10-10 |
 | [LangChain · 二 工具调用 Tool Use](./ai/tools/langchain-02-tool-use.md) | `@tool` 装饰器（函数名/docstring/类型注解 = name·description·args_schema 三要素）与 `StructuredTool`（Pydantic 精控参数）；**模型只提议不执行**——`bind_tools()` 本质是把工具 JSON Schema 预绑定进每次请求，返回 AIMessage 带 `tool_calls`（可多个·含 id）；手动回路四步（invoke→执行→`ToolMessage(tool_call_id=...)` 回灌→再 invoke）；`create_agent` 封装决策-执行-回灌循环（入出参均为 messages）；工具集臃肿=吃掉上下文预算 → MVTS 最小可行工具集 | 2026-10-08 |
 | [LangChain · 一 模型调用与消息体系](./ai/tools/langchain-01-模型调用与消息体系.md) | `init_chat_model()` 统一初始化（provider:model·模型代码解耦）；六种调用 invoke/ainvoke/stream/astream/batch/abatch（batch 更快但同步阻塞·异步需 abatch）；`model_kwargs` vs `extra_body`（模型字段 vs 厂商私有扩展如 DeepSeek thinking）；LangSmith 四大能力（tracing/monitoring/debug/evaluate）；AIMessage 特有 response_metadata·tool_calls（可多个）+ ToolMessage 的 tool_call_id 必须与 tool_calls[].id 配对 | 2026-10-06 |
+| [LangChain · 六 RAG 与文档加载](./ai/tools/langchain-06-rag与文档加载.md) | **RAG = 检索增强生成**：解决模型知识过时·幻觉·无私有数据三大短板；微调改「说话方式」vs RAG 改「手边材料」（便宜/快/易更新/可溯源）；两阶段——**离线索引**（加载→切分→向量化→入库）+ **在线检索生成**（检索→拼 Prompt→生成）；第一步 Load：一切资料统一为 `Document(page_content, metadata)`，metadata 管过滤/溯源/增量更新；Loader 家族（Text/PDF/Office/Web/CSV-JSON/代码/云盘 + `DirectoryLoader` 批量）；紧接 Split：`RecursiveCharacterTextSplitter` + chunk_size/overlap（中文补句末标点）；**铁律：索引与查询同一 embedding 模型**；检索可封装为 Tool 融入 Agent | 2026-10-11 |
 
 ---
 
@@ -170,6 +171,7 @@
 | 10/8 | — | — | LangChain（三）结构化输出（底层仍是 Function Calling——「只有 schema 无实现的虚拟工具」只取 args；`with_structured_output(Pydantic)` 进出强类型；Schema 设计 description/Literal/Optional/嵌套≤3层；备用 bind_tools+tool_choice；失败兜底：校验器·重试·few-shot） |
 | 10/8 | — | — | LangChain（四）Agent（**Agent = LLM + 工具 + 循环**；ReAct Thought-Action-Observation → 现代原生 Function Calling 版；`create_agent` 取代 AgentExecutor·内部图 model→tool_calls判断→tools→回灌→终止；Middleware 钩子=压缩·工具审批 HITL·动态工具集 ≈ Claude Code Hook；checkpointer + thread_id 会话记忆；HITL 四决策） |
 | 10/10 | — | — | LangChain（五）中间件 Middleware（**Middleware = Agent 的 AOP**；六大钩子 node-style 顺序执行·改 state·jump_to vs wrap-style 包住调用·控制 0/1/N 次·request.override；装饰器 vs 类·state_schema/tools/transformers；state 更新机制差异；before 正序·after 逆序·wrap 嵌套；内置中间件全览 ToolRetry/ModelFallback/Summarization/HITL/PII/CallLimit/TodoList/SubAgent/ContextEditing；实战：动态 prompt·动态模型·动态工具集·工具监控） |
+| 10/11 | — | — | LangChain（六）RAG 与文档加载（**RAG = 检索增强生成**，解决知识过时·幻觉·无私有数据；微调改「说话方式」vs RAG 改「手边材料」；两阶段：离线索引（加载→切分→向量化→入库）+ 在线检索生成（检索→拼 Prompt→生成）；**Document 对象** page_content 进向量·metadata 管过滤/溯源/更新；Loader 家族 TextLoader/PyPDFLoader/Office/WebBaseLoader/结构化 + `DirectoryLoader` 批量加载；切分 `RecursiveCharacterTextSplitter`·chunk_size/overlap·中文补匀末标点；**铁律：索引与查询同一 embedding 模型**） |
 
 ---
 
@@ -178,5 +180,5 @@
 - ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系 · ✅LangChain（二）工具调用 Tool Use · ✅LangChain（三）结构化输出 · ✅LangChain（四）Agent（ai/tools/）· ✅LangChain（五）中间件 Middleware（六大钩子·装饰器/类·state·执行顺序·内置全览·四个实战）
-- ⏳ 下一阶段：hello-agents 第九章（上下文工程）→ 后续章节 → all-in-rag（RAG）→ 天机学堂（Java/Spring AI 落地） 🎯
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系 · ✅LangChain（二）工具调用 Tool Use · ✅LangChain（三）结构化输出 · ✅LangChain（四）Agent（ai/tools/）· ✅LangChain（五）中间件 Middleware（六大钩子·装饰器/类·state·执行顺序·内置全览·四个实战）· ✅LangChain（六）RAG 与文档加载（RAG 两阶段·Document·Loader 家族·DirectoryLoader·切分策略）
+- ⏳ 下一阶段：**LangChain RAG 线继续**（向量化 Embeddings → 向量库 VectorStore → 检索器 Retriever → 高级检索）↔ all-in-rag ch3 对照 → hello-agents 第九章（上下文工程）→ 天机学堂（Java/Spring AI 落地） 🎯

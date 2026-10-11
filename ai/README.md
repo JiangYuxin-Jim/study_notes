@@ -76,6 +76,7 @@
 | LangChain | 三：结构化输出（with_structured_output / Pydantic Schema 设计 / 底层 Function Calling / 校验与兜底） | [langchain-03-structured-output](./tools/langchain-03-structured-output.md) | 2026-10-08 |
 | LangChain | 四：Agent（create_agent / ReAct → 原生 Function Calling / 内部图结构 / Middleware / checkpointer 记忆 / HITL） | [langchain-04-agents](./tools/langchain-04-agents.md) | 2026-10-08 |
 | LangChain | 五：中间件 Middleware（六大钩子 node/wrap-style · 装饰器 vs 类 · 自定义 state · 执行顺序与 jump_to · 内置中间件全览 · 动态 prompt/模型/工具 · 工具监控 · 对照 Claude Code Hook） | [langchain-05-middleware](./tools/langchain-05-middleware.md) | 2026-10-10 |
+| LangChain | 六：RAG 与文档加载（RAG 为什么需要·微调 vs RAG · 离线索引 + 在线检索生成两阶段 · Document 对象 page_content/metadata · Loader 家族 Text/PDF/Office/Web/结构化 · DirectoryLoader 批量加载 · 切分 RecursiveCharacterTextSplitter · 检索可作工具融入 Agent） | [langchain-06-rag与文档加载](./tools/langchain-06-rag与文档加载.md) | 2026-10-11 |
 
 ---
 
