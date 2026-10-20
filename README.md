@@ -47,6 +47,7 @@
 | [33 - 网络编程（UDP-TCP）](./JavaSE/33-网络编程（UDP-TCP）.md) | UDP（DatagramSocket）、TCP（Socket/ServerSocket）、三次握手/四次挥手、BS 架构 | 2026-07-30 |
 | [34 - 反射（Reflection）](./JavaSE/34-反射（Reflection）.md) | Class 对象获取、构造器/字段/方法反射、暴力反射、框架应用 | 2026-07-30 |
 | [35 - 动态代理（Proxy）](./JavaSE/35-动态代理（Proxy）.md) | JDK 动态代理（Proxy + InvocationHandler）、AOP 底层、Spring 应用场景 | 2026-07-30 |
+| [36 - JUC 并发编程三大特性（原子性·可见性·有序性）](./JavaSE/36-JUC并发编程三大特性（原子性·可见性·有序性）.md) | JMM 内存模型、原子性（count++ 非原子/CAS）、可见性（死循环案例）、有序性（指令重排·DCL 半初始化对象）、volatile 三特性语义、happens-before 七大规则 | 2026-10-20 |
 ### JavaWeb
 
 | 序号 | 内容 | 完成时间 |
@@ -158,6 +159,7 @@
 | 8/11 | — | — | hello-agents 第三章 大语言模型基础（N-gram→RNN→Transformer→Decoder-Only、提示工程、分词 BPE、模型选型、缩放法则与幻觉） |
 | 8/13 | — | — | hello-agents 第六章 框架开发实践（AutoGen·AgentScope·CAMEL·LangGraph 四大框架，核心实战 AgentScope 消息驱动/三国狼人杀、CAMEL 角色扮演/电子书、LangGraph 图式状态机/三步问答助手） |
 | 8/14 | — | — | hello-agents 第七章 构建你的Agent框架（自建轻量框架理念/万物皆为工具、HelloAgentsLLM多提供商封装、Message·Config·Agent抽象基类、五种Agent范式·统一工具系统） |
+| 10/20 | ✅ JUC 并发编程三大特性（JMM·原子性·可见性·有序性·指令重排·volatile·happens-before） | — | — |
 | 8/18 | — | — | hello-agents 第八章 记忆与检索（四种记忆·MemoryManager、RAG五层七步架构·向量库检索增强、智能文档问答助手实战；补看 learn Claude Code） |
 | 8/29 | — | — | Zotero 文献管理·基础使用（文献库/分类集/标签、网页抓取·DOI导入、PDF阅读高亮、Word插件自动引用·参考文献、引文格式切换、同步备份） |
 | 9/17 | — | — | Learn Claude Code 前三章（Agent Loop 循环工程化·工具调用 name/description/schema·三层权限隔离：白名单→参数校验→人工确认） |
@@ -177,7 +179,8 @@
 
 ## 📌 学习进度
 
-- ✅ JavaSE（完整 35 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
+- ✅ JavaSE（完整 36 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
+- 🔄 **JUC 并发补充** — ✅ 36 JUC 三大特性（JMM 内存模型·原子性/可见性/有序性·指令重排·volatile·happens-before）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
 - 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系 · ✅LangChain（二）工具调用 Tool Use · ✅LangChain（三）结构化输出 · ✅LangChain（四）Agent（ai/tools/）· ✅LangChain（五）中间件 Middleware（六大钩子·装饰器/类·state·执行顺序·内置全览·四个实战）· ✅LangChain（六）RAG 与文档加载（RAG 两阶段·Document·Loader 家族·DirectoryLoader·切分策略）
