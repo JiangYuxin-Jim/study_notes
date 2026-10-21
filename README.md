@@ -48,6 +48,7 @@
 | [34 - 反射（Reflection）](./JavaSE/34-反射（Reflection）.md) | Class 对象获取、构造器/字段/方法反射、暴力反射、框架应用 | 2026-07-30 |
 | [35 - 动态代理（Proxy）](./JavaSE/35-动态代理（Proxy）.md) | JDK 动态代理（Proxy + InvocationHandler）、AOP 底层、Spring 应用场景 | 2026-07-30 |
 | [36 - JUC 并发编程三大特性（原子性·可见性·有序性）](./JavaSE/36-JUC并发编程三大特性（原子性·可见性·有序性）.md) | JMM 内存模型、原子性（count++ 非原子/CAS）、可见性（死循环案例）、有序性（指令重排·DCL 半初始化对象）、volatile 三特性语义、happens-before 七大规则 | 2026-10-20 |
+| [37 - 原子类与锁机制（CAS·锁升级·AQS入门）](./JavaSE/37-原子类与锁机制（CAS·锁升级·AQS入门）.md) | 原子类家族（AtomicIntegerArray/引用原子类/字段更新器）、LongAdder 分段 CAS、乐观锁 vs 悲观锁、CAS 三大问题（ABA/自旋/单变量）、自旋锁、wait 与 sleep、生产者消费者（wait-notifyAll · Condition 精准唤醒 · 阻塞队列）、synchronized 锁升级（偏向→轻量→重量·Mark Word·JDK15 废弃偏向锁）、可重入原理（AQS state）、ReentrantLock（tryLock/lockInterruptibly/公平锁/排他共享）、Synchronized vs Lock 选型、高并发锁优化最佳实践 | 2026-10-21 |
 ### JavaWeb
 
 | 序号 | 内容 | 完成时间 |
@@ -160,6 +161,7 @@
 | 8/13 | — | — | hello-agents 第六章 框架开发实践（AutoGen·AgentScope·CAMEL·LangGraph 四大框架，核心实战 AgentScope 消息驱动/三国狼人杀、CAMEL 角色扮演/电子书、LangGraph 图式状态机/三步问答助手） |
 | 8/14 | — | — | hello-agents 第七章 构建你的Agent框架（自建轻量框架理念/万物皆为工具、HelloAgentsLLM多提供商封装、Message·Config·Agent抽象基类、五种Agent范式·统一工具系统） |
 | 10/20 | ✅ JUC 并发编程三大特性（JMM·原子性·可见性·有序性·指令重排·volatile·happens-before） | — | — |
+| 10/21 | ✅ 原子类与锁机制（AtomicIntegerArray·引用原子类·LongAdder·CAS 三大问题·自旋锁·锁升级·ReentrantLock 全家桶·锁优化实践，P49~P67） | — | — |
 | 8/18 | — | — | hello-agents 第八章 记忆与检索（四种记忆·MemoryManager、RAG五层七步架构·向量库检索增强、智能文档问答助手实战；补看 learn Claude Code） |
 | 8/29 | — | — | Zotero 文献管理·基础使用（文献库/分类集/标签、网页抓取·DOI导入、PDF阅读高亮、Word插件自动引用·参考文献、引文格式切换、同步备份） |
 | 9/17 | — | — | Learn Claude Code 前三章（Agent Loop 循环工程化·工具调用 name/description/schema·三层权限隔离：白名单→参数校验→人工确认） |
@@ -179,8 +181,8 @@
 
 ## 📌 学习进度
 
-- ✅ JavaSE（完整 36 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
-- 🔄 **JUC 并发补充** — ✅ 36 JUC 三大特性（JMM 内存模型·原子性/可见性/有序性·指令重排·volatile·happens-before）
+- ✅ JavaSE（完整 37 篇笔记）— 全部完结 🎉（补写网络编程·反射·动态代理·继承）
+- 🔄 **JUC 并发补充** — ✅ 36 JUC 三大特性（JMM 内存模型·原子性/可见性/有序性·指令重排·volatile·happens-before）· ✅ 37 原子类与锁机制（原子类家族·LongAdder·CAS 三大问题·锁升级·ReentrantLock 全家桶·锁优化实践）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
 - 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系 · ✅LangChain（二）工具调用 Tool Use · ✅LangChain（三）结构化输出 · ✅LangChain（四）Agent（ai/tools/）· ✅LangChain（五）中间件 Middleware（六大钩子·装饰器/类·state·执行顺序·内置全览·四个实战）· ✅LangChain（六）RAG 与文档加载（RAG 两阶段·Document·Loader 家族·DirectoryLoader·切分策略）
