@@ -104,10 +104,12 @@
 | [板块说明与学习路线](./ai/README.md) | hello-agents（Agent 16章）+ all-in-rag（RAG 9章），Python + Java 双修 | 2026-08-07 |
 | [hello-agents 01 · 初识智能体(理论基础)](./ai/hello-agents/01-初识智能体(理论基础).md) | Agent 定义、传统演进、LLM 新范式、分类维度、PEAS、Agent Loop、TAO | 2026-08-07 |
 | [hello-agents 02 · 动手实现第一个智能体](./ai/hello-agents/02-动手实现第一个智能体与协作模式.md) | Python 旅行助手（提示词+工具+LLM客户端+主循环）、协作模式 | 2026-08-07 |
+| [hello-agents 第二章 · 智能体发展史](./ai/hello-agents/02-智能体发展史.md) | 四代演进：符号主义(物理符号系统·接地难题) → 专家系统(知识获取瓶颈·知识外置) → 强化学习(策略/奖励/探索-利用·样本效率) → LLM 智能体(LLM+工具+循环+记忆)；ReAct/Reflexion/Plan-and-Solve 的范式祖先 | 2026-10-18 |
 | [hello-agents 03 · 大语言模型基础](./ai/hello-agents/03-大语言模型基础.md) | N-gram→RNN/LSTM→Transformer→Decoder-Only、采样参数、提示工程、BPE 分词、本地部署 Qwen、模型选型、缩放法则与幻觉 | 2026-08-11 |
 | [hello-agents 06 · 框架开发实践](./ai/hello-agents/06-框架开发实践.md) | AutoGen/AgentScope/CAMEL/LangGraph 四大框架：对话驱动·消息驱动/工程化·角色扮演·图式状态机，实战案例 + 选型分析 | 2026-08-13 |
 | [hello-agents 07 · 构建你的Agent框架](./ai/hello-agents/07-构建你的Agent框架.md) | 自建框架理念(轻量+万物皆为工具)、HelloAgentsLLM多提供商/本地模型/自动检测、Message·Config·Agent抽象基类、五种范式实现(Simple/ReAct/Reflection/PlanAndSolve/FunctionCall)、统一工具系统 | 2026-08-14 |
 | [hello-agents 08 · 记忆与检索](./ai/hello-agents/08-记忆与检索.md) | 四种记忆(工作/情景/语义/感知)+MemoryManager添加·检索·整合·遗忘、RAG"五层七步"架构+Markitdown统一转换+向量库检索增强、智能文档问答助手综合实战 | 2026-08-18 |
+| [hello-agents 09 · 上下文工程](./ai/hello-agents/09-上下文工程.md) | 上下文工程 vs 提示工程、上下文腐蚀与注意力预算、上下文解剖学(系统提示分区·工具 MVTS·示例)、JIT 上下文与渐进式披露、长时程三件套(压缩整合/结构化笔记/子代理)、**ContextBuilder GSSC 流水线**(Gather 多源容错 → Select 相关性×新近性指数衰减+阈值过滤+贪心填充 → Structure 五分区模板 → Compress 分区截断兜底)、NoteTool·TerminalTool | 2026-10-19 |
 | [Zotero 文献管理·基础使用](./ai/tools/zotero-基础使用.md) | 文献库/分类集/标签/附件/笔记、网页抓取·DOI导入、PDF阅读高亮、Word插件自动引用与参考文献、引文格式切换、同步备份 | 2026-08-29 |
 | [Learn Claude Code · 前三章](./ai/tools/learn-claude-code-前三章.md) | Agent Loop（TAO 循环工程化·终止条件·上下文累加）、工具调用（name/description/schema + 提议→权限→执行→结果回灌）、三层权限隔离（工具白名单→参数级校验→人工确认） | 2026-09-17 |
 | [Learn Claude Code · 第四章 钩子函数](./ai/tools/learn-claude-code-04-钩子函数.md) | Hooks 生命周期事件（Session/每轮/每工具调用）、三层配置结构（事件+matcher+handler）、5 种 handler、退出码 0/2 与 JSON 输出、权限接管（PreToolUse 四决策 allow/deny/ask/defer + PermissionRequest 写权限规则）、实战：拦截 rm / 自动 prettier 格式化 | 2026-09-18 |
@@ -176,6 +178,9 @@
 | 10/8 | — | — | LangChain（四）Agent（**Agent = LLM + 工具 + 循环**；ReAct Thought-Action-Observation → 现代原生 Function Calling 版；`create_agent` 取代 AgentExecutor·内部图 model→tool_calls判断→tools→回灌→终止；Middleware 钩子=压缩·工具审批 HITL·动态工具集 ≈ Claude Code Hook；checkpointer + thread_id 会话记忆；HITL 四决策） |
 | 10/10 | — | — | LangChain（五）中间件 Middleware（**Middleware = Agent 的 AOP**；六大钩子 node-style 顺序执行·改 state·jump_to vs wrap-style 包住调用·控制 0/1/N 次·request.override；装饰器 vs 类·state_schema/tools/transformers；state 更新机制差异；before 正序·after 逆序·wrap 嵌套；内置中间件全览 ToolRetry/ModelFallback/Summarization/HITL/PII/CallLimit/TodoList/SubAgent/ContextEditing；实战：动态 prompt·动态模型·动态工具集·工具监控） |
 | 10/11 | — | — | LangChain（六）RAG 与文档加载（**RAG = 检索增强生成**，解决知识过时·幻觉·无私有数据；微调改「说话方式」vs RAG 改「手边材料」；两阶段：离线索引（加载→切分→向量化→入库）+ 在线检索生成（检索→拼 Prompt→生成）；**Document 对象** page_content 进向量·metadata 管过滤/溯源/更新；Loader 家族 TextLoader/PyPDFLoader/Office/WebBaseLoader/结构化 + `DirectoryLoader` 批量加载；切分 `RecursiveCharacterTextSplitter`·chunk_size/overlap·中文补匀末标点；**铁律：索引与查询同一 embedding 模型**） |
+| 10/18 | — | — | hello-agents 第二章 智能体发展史（补学：符号主义·物理符号系统假说·接地难题 → 专家系统·知识获取瓶颈 → 强化学习·策略/奖励/探索利用 → LLM 智能体；四代主线对照表 + 现代范式祖先 ReAct/Reflexion/Plan-and-Solve） |
+| 10/19 | — | — | hello-agents 第九章 上下文工程（上下文工程 vs 提示工程·上下文腐蚀与注意力预算；上下文解剖学：系统提示分区/工具 MVTS/示例；JIT 上下文与渐进式披露；长时程三件套：压缩整合·结构化笔记·子代理架构；**ContextBuilder GSSC 流水线**：Gather 多源容错汇集 → Select 相关性×新近性(指数衰减)+阈值过滤+贪心填充 → Structure Role/Task/Evidence/Context/Output 五分区 → Compress 分区截断兜底；NoteTool 结构化笔记 · TerminalTool 文件系统 JIT 访问） |
+| 10/22 | — | — | 复习日：第七章 构建你的Agent框架 + 第八章 记忆与检索（前半）回顾，无新笔记 |
 
 ---
 
@@ -185,5 +190,5 @@
 - 🔄 **JUC 并发补充** — ✅ 36 JUC 三大特性（JMM 内存模型·原子性/可见性/有序性·指令重排·volatile·happens-before）· ✅ 37 原子类与锁机制（原子类家族·LongAdder·CAS 三大问题·锁升级·ReentrantLock 全家桶·锁优化实践）
 - ✅ JavaWeb（15 篇笔记）— 已完成
 - ✅ **Redis（全部完结 🎉）** — 基础篇✅ 实战篇✅ 高级篇(持久化·主从·哨兵·集群·多级缓存·最佳实践)✅ 原理篇(数据结构·网络模型·通信协议RESP·内存回收)✅，175 集全学完
-- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系 · ✅LangChain（二）工具调用 Tool Use · ✅LangChain（三）结构化输出 · ✅LangChain（四）Agent（ai/tools/）· ✅LangChain（五）中间件 Middleware（六大钩子·装饰器/类·state·执行顺序·内置全览·四个实战）· ✅LangChain（六）RAG 与文档加载（RAG 两阶段·Document·Loader 家族·DirectoryLoader·切分策略）
-- ⏳ 下一阶段：**LangChain RAG 线继续**（向量化 Embeddings → 向量库 VectorStore → 检索器 Retriever → 高级检索）↔ all-in-rag ch3 对照 → hello-agents 第九章（上下文工程）→ 天机学堂（Java/Spring AI 落地） 🎯
+- 🔄 **AI 智能体与 RAG（新主线，优先）** — **hello-agents**（智能体 16 章）✅第一章(理论+动手) · ✅第二章(智能体发展史) · ✅第三章(LLM基础) · ✅第六章(框架开发实践) · ✅第七章(构建你的Agent框架) · ✅第八章(记忆与检索) · ✅第九章(上下文工程)；all-in-rag（RAG 9章）✅clone → 待学；**工具/框架基础** ✅Zotero 文献管理基础 · ✅Learn Claude Code 前八章（Loop / 工具调用 / 三层权限 / 钩子函数 / TodoWrite / Subagent 与 Skill 加载 / 上下文压缩 / 记忆系统）· ✅LangChain（一）模型调用与消息体系 · ✅LangChain（二）工具调用 Tool Use · ✅LangChain（三）结构化输出 · ✅LangChain（四）Agent（ai/tools/）· ✅LangChain（五）中间件 Middleware（六大钩子·装饰器/类·state·执行顺序·内置全览·四个实战）· ✅LangChain（六）RAG 与文档加载（RAG 两阶段·Document·Loader 家族·DirectoryLoader·切分策略）
+- ⏳ 下一阶段：**LangChain RAG 线继续**（向量化 Embeddings → 向量库 VectorStore → 检索器 Retriever → 高级检索）↔ all-in-rag ch3 对照 → hello-agents 第十章（智能体通信协议 MCP/A2A/ANP）→ 天机学堂（Java/Spring AI 落地） 🎯
