@@ -63,6 +63,14 @@
 | 9 | 上下文工程（补充）· JIT 上下文与 GSSC 流水线 | [09-补充-JIT上下文与GSSC流水线](./hello-agents/09-补充-JIT上下文与GSSC流水线.md) | 2026-10-26 |
 | 9–16 | 后续章节 | | |
 
+### 深度学习实战 → 笔记 `ai/transformer/` 下
+
+| 项目 | 主题 | 笔记 | 完成时间 |
+|------|------|------|----------|
+| Transformer-pytorch | 从零手搓 Transformer 做英译中（PyTorch 亲手实现 Encoder-Decoder·约 1500 行·BLEU 26.30） | [01-从零手搓Transformer英译中实战](./transformer/01-从零手搓Transformer英译中实战.md) | 2026-10-28 |
+
+---
+
 ### 研究/写作辅助工具 → 笔记 `ai/tools/` 下
 
 | 工具 | 主题 | 笔记 | 完成时间 |
