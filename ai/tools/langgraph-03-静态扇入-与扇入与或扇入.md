@@ -1,417 +1,488 @@
-# LangGraph（三）· 静态扇入：与节点扇入 vs 或节点扇入
+# LangGraph · 静态扇入：或节点扇入 vs 与节点扇入
 
 > 学习日期：2026-10-30
-> 环境：本机 `langgraph 1.2.16`（本文所有结论均为实际运行验证，附实测输出）
+> 环境：本机 `langgraph 1.2.16` + `langchain-core`，全部结论由**实际运行**验证
 > 承接：[LangGraph（二）· 进阶建图](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)（`Send` 动态扇出）
 
 ---
 
-## 一、先分清"扇出"和"扇入"
+## 一、这篇代码要回答什么
 
-任何并行图都是成对出现的：
+先看今天要分析的图：
 
 ```
-        扇出 (fan-out)                扇入 (fan-in / join)
-   START ──┬──► A                 A ──┐
-           ├──► B        ───►         ├──► Merge ──► ...
-           └──► C                 C ──┘
-   一个源头分叉成多路            多路重新汇聚到一点
+                                     ┌─── node_b ─── node_d ───┐
+START ──► node_a ────────────────────┤                         ├──► node_e ──► END
+                                     └─── node_c ──────────────┘
 ```
 
-- **扇出**：决定有几路并行、哪几路并行
-- **扇入**：决定这几路**什么时候**算"齐了"、**怎么**把结果合到一起
+`node_a` 之后分成两路（`node_b → node_d` 和 `node_c`），最后两路都要汇到 `node_e`。
+**汇合处怎么写这一条边，决定了 `node_e` 会被执行几次。**
 
-LangGraph 里扇入其实只由**一个东西**决定：**目标节点的入口边是否全部被激活**。
-围绕这一点，产生两种语义完全不同的扇入模式——**与（AND）** 和 **或（OR）**。
+代码里给了两种写法，只差一行：
 
-| | **与扇入 AND-join** | **或扇入 OR-join** |
-|---|---|---|
-| 触发条件 | **所有**入边都走到，才执行一次 | **任意一条**入边走到，就执行一次 |
-| 上游关系 | 并行兄弟，全部必达 | 互斥候选（分支/重试/可选步骤） |
-| 执行次数 | 每个 super-step **最多 1 次** | 每次被激活就跑，可能跑多次 |
-| 拿到的 state | **所有**兄弟的写入都已合并 | 只有**那条路径**上的写入 |
-| 典型场景 | 多路检索 → 汇总；多专家 → 裁判 | if/else 汇合、try 后 fallback、循环出口 |
-| 关键前提 | **必须配 reducer**（`Annotated[T, f]`） | 一般用 LastValue 就够 |
+```python
+# 写法一：或节点扇入关系
+builder.add_edge("node_c", "node_e")
+builder.add_edge("node_d", "node_e")
 
-记忆锚点：**与扇入 = "人都到齐了才开会"；或扇入 = "谁来了谁先讲"。**
+# 写法二：与节点扇入关系
+builder.add_edge(["node_c", "node_d"], "node_e")   # ← 注意是 list
+```
+
+看起来只是"两条边"和"一条边写两个源头"的语法差别，**实际运行结果完全不同**：
+
+| 写法 | `node_e` 执行次数 | `node_e` 拿到的状态 |
+|------|------------------|-------------------|
+| 或扇入（两条 `add_edge`） | **2 次** ✅ 实测 | 前一次看得到 `node_d` 的结果，后一次只看得到 `node_c` 的结果 |
+| 与扇入（list `add_edge`） | **1 次** ✅ 实测 | 同时看得到 `node_c` 和 `node_d` 的结果 |
+
+这就是本篇的核心：**扇入不是"两条线连到一个点"这么简单，它决定的是"要不要等齐"。**
 
 ---
 
-## 二、静态 vs 动态：本文的"静态"指什么
+## 二、先跑一遍看结果
 
-| | 静态扇入 | 动态扇入 |
-|---|---|---|
-| 路数在哪决定 | **建图时写死**（画几条边就是几条） | **运行时决定**（`Send` 按数据量生成） |
-| API | `add_edge` 多条指向同一节点 | `add_conditional_edges` 返回 `[Send(...)]` |
-| state | 各分支共享主 state，结果靠 **reducer** 合并 | 每个 `Send` 的 payload **就是**该 worker 的完整 state |
-| 笔记 | **本篇** | [（二）第五章](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md) |
+### 2.1 完整可运行代码
 
-一句话：**静态扇入是"图的形状"决定的，动态扇入是"数据"决定的。**
+```python
+from typing import TypedDict
+from loguru import logger
+from langchain_core.runnables import RunnableConfig
+from langgraph.graph import StateGraph, START, END
+
+# 1. 定义状态
+class EmptyState(TypedDict):
+    pass
+
+# 2. 声明节点
+def node_a(state: EmptyState, config: RunnableConfig) -> EmptyState:
+    cur_step = config["metadata"]["langgraph_step"]
+    logger.info(f"当前步骤: {cur_step}")
+    return {}
+
+def node_b(state: EmptyState, config: RunnableConfig) -> EmptyState:
+    cur_step = config["metadata"]["langgraph_step"]
+    logger.info(f"当前步骤: {cur_step}")
+    return {}
+
+def node_c(state: EmptyState, config: RunnableConfig) -> EmptyState:
+    cur_step = config["metadata"]["langgraph_step"]
+    logger.info(f"当前步骤: {cur_step}")
+    return {}
+
+def node_d(state: EmptyState, config: RunnableConfig) -> EmptyState:
+    cur_step = config["metadata"]["langgraph_step"]
+    logger.info(f"当前步骤: {cur_step}")
+    return {}
+
+def node_e(state: EmptyState, config: RunnableConfig) -> EmptyState:
+    cur_step = config["metadata"]["langgraph_step"]
+    logger.info(f"当前步骤: {cur_step}")
+    return {}
+
+# 3. 构建图
+builder = StateGraph(state_schema=EmptyState)
+builder.add_node("node_a", node_a)
+builder.add_node("node_b", node_b)
+builder.add_node("node_c", node_c)
+builder.add_node("node_d", node_d)
+builder.add_node("node_e", node_e)
+
+builder.add_edge(START, "node_a")
+builder.add_edge("node_a", "node_b")
+builder.add_edge("node_a", "node_c")
+builder.add_edge("node_b", "node_d")
+
+# 或节点扇入关系
+# builder.add_edge("node_c", "node_e")
+# builder.add_edge("node_d", "node_e")
+
+# 与节点扇入关系
+builder.add_edge(["node_c", "node_d"], "node_e")
+
+builder.add_edge("node_e", END)
+
+graph = builder.compile()
+graph.invoke({})
+
+from IPython.display import display
+display(graph)
+```
+
+### 2.2 实测输出
+
+把 `logger.info` 换成 `print`（我们只要看执行顺序），其他一字不改，跑出来的结果：
+
+**写法一：或扇入（两条独立 `add_edge`）**
+
+```
+[run] node_a  langgraph_step=1
+[run] node_b  langgraph_step=2
+[run] node_c  langgraph_step=2
+[run] node_d  langgraph_step=3
+[run] node_e  langgraph_step=3     ← 第一次
+[run] node_e  langgraph_step=4     ← 第二次
+node_e 出现次数: 2
+```
+
+**写法二：与扇入（list `add_edge`）**
+
+```
+[run] node_a  langgraph_step=1
+[run] node_b  langgraph_step=2
+[run] node_c  langgraph_step=2
+[run] node_d  langgraph_step=3
+[run] node_e  langgraph_step=4     ← 只有一次，而且推到了第 4 步
+node_e 出现次数: 1
+```
+
+**关键信息全在 `langgraph_step` 上。** 下一节专门拆它。
 
 ---
 
-## 三、与节点扇入（AND-join）：全员必达
+## 三、读懂 `langgraph_step`：它数的是 super-step
 
-### 3.1 最小实现
+`config["metadata"]["langgraph_step"]` 是 LangGraph 内部注入的一个元数据，**它等于"当前执行到第几个 super-step"**，从 1 开始。
+
+### 3.1 super-step 是什么
+
+- **一个 super-step = 一轮可并行的执行**（Pregel 模型里的 tick）
+- 同一 super-step 里的节点**同时**执行（多线程 / 异步并发）
+- 一个节点执行完写入 state 后，**下一个 super-step 才能看到它的结果**
+- 所以 `langgraph_step` 相同的节点 = 同一个 super-step 里并行跑
+
+### 3.2 两种写法下的步骤分解
+
+**或扇入（两条边）**
+
+| step | 跑的节点 | 说明 |
+|------|---------|------|
+| 1 | node_a | |
+| 2 | node_b、node_c | node_a 分两路，并行 |
+| 3 | node_d、**node_e** | node_b 完成 → node_d；**node_c 完成 → node_e 第一次** |
+| 4 | **node_e** | node_d 完成 → **node_e 第二次** |
+
+注意 step 3：`node_d` 和 `node_e` 同属一个 super-step。也就是说，**`node_e` 在 `node_d` 还在跑的时候就已经执行了第一遍**。它当时看到的 state 里只有 `node_c` 的写入，`node_d` 的结果还没进来。
+
+**与扇入（list 边）**
+
+| step | 跑的节点 | 说明 |
+|------|---------|------|
+| 1 | node_a | |
+| 2 | node_b、node_c | 并行 |
+| 3 | node_d | 只有这一路在动；`node_c` 完成后**在 node_e 门口等着** |
+| 4 | node_e | node_c 早就到了，node_d 也到了 → **等齐，跑一次** |
+
+**`node_e` 被推到了 step 4**——这就是"等待"的代价，也是"等待"的证明。
+
+### 3.3 一句话口诀
+
+> **`langgraph_step` 是扇入语义的照妖镜：**
+> `node_e` 出现在**同一个 step 的不同值** → 或扇入（各自到达各自跑）；
+> `node_e` 只出现**一次且 step 靠后** → 与扇入（等齐了才跑）。
+
+---
+
+## 四、两种扇入的机制差异
+
+### 4.1 或扇入：`add_edge(src, tgt)` × N —— "谁到谁跑"
+
+```python
+builder.add_edge("node_c", "node_e")
+builder.add_edge("node_d", "node_e")
+```
+
+**LangGraph 内部发生了什么：**
+
+`node_e` 的入边有两条（`node_c → node_e`、`node_d → node_e`），它们是**两个独立的触发条件**。
+每条边单独在自己的源节点完成后触发一次对 `node_e` 的调度。
+
+- `node_c` 在 step 2 完成 → 触发 `node_e`，排进 step 3
+- `node_d` 在 step 3 完成 → 再次触发 `node_e`，排进 step 4
+
+两次触发 **不互相等待**，所以 `node_e` 跑了两遍。
+
+**语义本质：这是"或"——任一路到达就执行。**
+
+**适用场景：**
+
+- 多路输入互斥（一条 if、一条 else），走哪条都汇合到同一个后处理
+- 多个上游可能随时产出，下游应该"来一个处理一个"
+- **不关心是否齐活**的场景
+
+**⚠️ 但在这个图上用它，很可能是 bug。** 因为 `node_e` 语义上是"两路都完了之后的总汇总"，跑两遍通常不是你要的：
+- 如果 `node_e` 里有副作用（写库、发消息、调 LLM），就会**重复执行两次**
+- 第一次执行时 `node_d` 的结果压根不在 state 里，逻辑会出错
+
+### 4.2 与扇入：`add_edge([src1, src2], tgt)` —— "全部到齐才跑"
+
+```python
+builder.add_edge(["node_c", "node_d"], "node_e")
+```
+
+**LangGraph 内部发生了什么：**
+
+`add_edge` 的第一个参数**接受 list**，这时它注册的是**一条"多源汇合边"**：
+
+- 这条边会**记录** `node_c` 和 `node_d` 两个源头
+- 只有当**两个源头都在之前某个时刻完成过**，才会触发 `node_e`
+- 而且触发**只触发一次**——不会因为 `node_c` 完成触发一次、`node_d` 完成又触发一次
+
+实测正是这个结果：`node_e` 在 step 4 被调度，只跑一次，且此时 `node_c`（step 2）和 `node_d`（step 3）的结果都在 state 里。
+
+**语义本质：这是"与"——所有输入的边都完成了才执行。**
+
+**适用场景（这才是本图的正确写法）：**
+
+- **并行分支的汇聚点**：几路并行统计 / 几路并行检索 / 几路并行调工具，最后汇总
+- 汇总逻辑必须看到**所有分支**的结果
+- 汇总节点有副作用，**只能执行一次**
+
+### 4.3 机制对照表
+
+| 维度 | 或扇入 `add_edge(a,t); add_edge(b,t)` | 与扇入 `add_edge([a,b], t)` |
+|------|-------------------------------------|---------------------------|
+| 注册的是什么 | **两条独立边** | **一条多源汇合边** |
+| 触发条件 | 任一源完成 | **所有源都完成过** |
+| 执行次数 | 每个源完成各触发 1 次 → **N 次** | **1 次** |
+| 每次看到的状态 | 只有**当次触发路径**的写入 | **所有源**的写入 |
+| 调度时机 | 最早可执行的 super-step | 最后一个源完成后的**下一个** super-step |
+| 语义 | 或 | 与 |
+| 本图正确用法 | ❌ 会跑两遍 | ✅ |
+
+---
+
+## 五、为什么 `add_edge` 能接受 list？
+
+这是 LangGraph 里很容易被忽略的一个 API 细节。`add_edge` 的签名大致是：
+
+```python
+def add_edge(self, start_key: str | list[str], end_key: str, *, data=None) -> Self:
+```
+
+`start_key` 是 `str | list[str]`：
+
+- **传 `str`** → 普通边，单源单目标
+- **传 `list[str]`** → **多源汇合边**，所有源都完成后才触发一次目标
+
+这跟 `add_node` / `add_edge` 平时的用法完全一致，只是没人告诉你第一个参数还能给个 list。
+
+> **记忆锚点：`add_edge(["A","B"], "C")` = "A 和 B 都到齐了，C 才开始"。**
+
+---
+
+## 六、改成"有状态"的版本，看得更清楚
+
+前面的 `EmptyState` 是空的，所以只能靠 `langgraph_step` 观察。把 state 变成有内容，差异会直接摆在脸上。
 
 ```python
 from typing import TypedDict, List, Annotated
 import operator
 from langgraph.graph import StateGraph, START, END
 
-class S1(TypedDict):
-    results: Annotated[List[str], operator.add]   # ← 扇入的前提
-    calls:   Annotated[List[str], operator.add]
+class S(TypedDict):
+    log: Annotated[List[str], operator.add]   # ← 注意 reducer
 
-def a(s): return {"results": ["A"], "calls": ["a"]}
-def b(s): return {"results": ["B"], "calls": ["b"]}
-def c(s):
-    print(f"[c] 收到 results={s['results']} calls={s['calls']}")
-    return {"results": ["C"], "calls": ["c"]}
+def na(s): return {"log": ["a"]}
+def nb(s): return {"log": ["b"]}
+def nc(s): return {"log": ["c"]}
+def nd(s): return {"log": ["d"]}
 
-g1 = StateGraph(S1)
-g1.add_node("a", a); g1.add_node("b", b); g1.add_node("c", c)
-g1.add_edge(START, "a");  g1.add_edge(START, "b")   # 扇出：固定两路
-g1.add_edge("a", "c");    g1.add_edge("b", "c")     # 扇入：两条边都指向 c
-g1.add_edge("c", END)
+def ne(s):
+    print(f"node_e 看到的 log = {s['log']}")
+    return {"log": ["e"]}
 
-print(g1.compile().invoke({"results": [], "calls": []}))
+def build(mode):
+    b = StateGraph(S)
+    for n, f in [("node_a", na), ("node_b", nb), ("node_c", nc),
+                 ("node_d", nd), ("node_e", ne)]:
+        b.add_node(n, f)
+    b.add_edge(START, "node_a")
+    b.add_edge("node_a", "node_b")
+    b.add_edge("node_a", "node_c")
+    b.add_edge("node_b", "node_d")
+    if mode == "or":
+        b.add_edge("node_c", "node_e")
+        b.add_edge("node_d", "node_e")
+    else:
+        b.add_edge(["node_c", "node_d"], "node_e")
+    b.add_edge("node_e", END)
+    return b.compile()
 ```
 
-**实测输出：**
+**`or` 模式实测：**
 
 ```
-[c] 收到 results=['A', 'B'] calls=['a', 'b']
-{'results': ['A', 'B', 'C'], 'calls': ['a', 'b', 'c']}
+node_e 看到的 log = ['a', 'b', 'c']           ← 第一次：node_c 到了，node_d 还没到
+node_e 看到的 log = ['a', 'b', 'c', 'd', 'e'] ← 第二次：node_d 到了，还看到了自己上次写的 'e'
+final: {'log': ['a', 'b', 'c', 'd', 'e', 'e']}
 ```
 
-三个关键事实：
+两个关键观察：
 
-1. **`c` 只执行了 1 次**，且进去时 `a` 和 `b` 的结果都已在 state 里 —— 这就是"全员到齐"。
-2. `a` 和 `b` 在**同一个 super-step** 里并行跑（不管用的是多线程还是 await）。
-3. `c` 的写入发生在**下一个** super-step —— 扇入节点天然是 super-step 的分界线。
+1. **第一次执行时 `'d'` 不在**——`node_d` 还没跑完。如果 `node_e` 的逻辑是"汇总 b 和 c 两路的结果"，第一次执行就是在**拿残缺数据算一个错答案**。
+2. **`'e'` 出现了两次**——`node_e` 确实执行了两遍，两次的写入都进了 state。**有副作用的节点（写库 / 发消息 / 扣费 / 调 LLM）就会重复发生两遍。**
 
-### 3.2 三路扇入 + 逐步观察
+而且第二次触发时读到的是**上一个 super-step 合并后的快照**（能看到第一次写的 `'e'`），这印证了」super-step 之间才做 state 合并「这个机制。
+
+**`and` 模式实测：**
+
+```
+node_e 看到的 log = ['a', 'b', 'c', 'd']   ← 两路都在，只跑一次
+final: {'log': ['a', 'b', 'c', 'd', 'e']}
+```
+
+干净的一次汇总：`'b'`、`'c'`、`'d'` 全在，`'e'` 只有一个。
+
+**这才是你想要的"汇总节点"。**
+
+> ⚠️ 这里 `log` 必须用 `Annotated[List[str], operator.add]`。
+> 如果你在**或扇入**下用了一个**没有 reducer** 的 key，而两个上游恰好同时写它（同 super-step），会直接抛
+> `InvalidUpdateError: Can receive only one value per step`。这一点在[LangGraph（一）](./langgraph-01-图基础与状态管理.md)讲过，这里再强调一次。
+
+---
+
+## 七、什么时候该用哪个？（决策清单）
+
+拿着这张图问自己：
+
+1. **`node_e` 是不是要做"总汇总"？**（需要看到所有分支结果）
+   → **与扇入** `add_edge(["node_c","node_d"], "node_e")`
+
+2. **`node_e` 是不是"谁先来先处理谁"？**（每个上游产出独立处理）
+   → **或扇入** 两条独立 `add_edge`
+
+3. **`node_e` 有副作用吗？**（写库 / 发消息 / 调 LLM / 扣费）
+   → **有就一定要与扇入**，或至少保证幂等。或扇入会跑 N 次。
+
+4. **等待成本能接受吗？**
+   → 与扇入的代价是**慢一整个 super-step**（要等最慢的那路）。如果两路耗时差异极大，且你确实不需要齐活，那或扇入才合理。
+
+5. **两路是不是互斥的（走 A 就不走 B）？**
+   → 这种情况下用**条件边**分叉更合适，而不是 `node_a` 同时连两条边。
+   因为现在这个图里 `node_b` 和 `node_c` 是**并行、都必然执行**的。
+
+---
+
+## 八、这个图的几个隐藏陷阱
+
+### 陷阱 1：这个图里 `node_b` 和 `node_c` 是并行，不是分支
 
 ```python
-class S3(TypedDict):
-    parts:   Annotated[List[str], operator.add]
-    summary: str
-
-def p1(s): return {"parts": ["p1"]}
-def p2(s): return {"parts": ["p2"]}
-def p3(s): return {"parts": ["p3"]}
-def collect(s):
-    print(f"[collect] parts={s['parts']}")
-    return {"summary": "+".join(s["parts"])}
-
-g3 = StateGraph(S3)
-for n, f in [("p1", p1), ("p2", p2), ("p3", p3), ("collect", collect)]:
-    g3.add_node(n, f)
-for n in ["p1", "p2", "p3"]:
-    g3.add_edge(START, n)      # 三路扇出
-    g3.add_edge(n, "collect")  # 三路扇入
-g3.add_edge("collect", END)
-
-for step in g3.compile().stream({"parts": [], "summary": ""}, stream_mode="updates"):
-    print(step)
+builder.add_edge("node_a", "node_b")
+builder.add_edge("node_a", "node_c")     # 两条 add_edge，= 并行扇出
 ```
 
-**实测输出：**
-
-```
-{'p1': {'parts': ['p1']}}
-{'p2': {'parts': ['p2']}}
-{'p3': {'parts': ['p3']}}
-[collect] parts=['p1', 'p2', 'p3']
-{'collect': {'summary': 'p1+p2+p3'}}
-```
-
-四行 `updates` = 两个 super-step：第一个是 p1/p2/p3 的并行写入（分别打印，因为 `updates` 是按节点分组的），第二个才是 `collect`。
-**注意 `collect` 只出现一次** —— 三路齐了才跑一次，不是跑三次。
-
-### 3.3 自定义 reducer 也能扇入（不一定是 list）
+`node_a` 完成后，`node_b` 和 `node_c` **都会执行**（step 2 同时跑）。如果你本意是"二选一"，应该用：
 
 ```python
-class S6(TypedDict):
-    n:     Annotated[int, operator.add]     # 数字相加
-    order: Annotated[List[str], operator.add]
-
-def s6a(s): return {"n": 1,  "order": ["s6a"]}
-def s6b(s): return {"n": 10, "order": ["s6b"]}
-def s6c(s):
-    print(f"[s6c] n={s['n']} order={s['order']}")
-    return {"order": ["s6c"]}
-
-# START → s6a, s6b；s6a, s6b → s6c
+builder.add_conditional_edges("node_a", router, {"b": "node_b", "c": "node_c"})
 ```
 
-**实测输出：**
+**判断口诀：`add_edge` 发两次 = 并行都要跑；`add_conditional_edges` 一次 = 二选一。**
 
-```
-[s6c] n=11 order=['s6a', 's6b']
-{'n': 11, 'order': ['s6a', 's6b', 's6c']}
-```
+### 陷阱 2：`node_b` 比 `node_c` 多一跳
 
-扇入节点看到的是**所有兄弟合并后的 state**：`1 + 10 = 11`。
-`Annotated[int, operator.add]` 用得少但完全合法——凡是"多路要汇总成一个值"的，reducer 就是那个汇总函数。
+拓扑上 `node_b → node_d` 是两跳，`node_c` 是一跳。所以：
+- `node_c` 在 step 2 就完事了，`node_d` 要等到 step 3
+- **这就是或扇入会跑两次的直接原因**：两路完成时间不同步
 
-### 3.4 ⚠️ 核心坑：没有 reducer 直接崩
+**只要两路长度不同，或者两路耗时不同，或扇入就一定会重复执行。**
 
-删掉 `Annotated` 会怎样？
+### 陷阱 3：`langgraph_step` 不是节点执行次数
+
+`langgraph_step` 是 **super-step 编号**，不是"第几个节点"。
+同一个 step 里可以同时跑多个节点（本例 step 2 同时跑 `node_b` 和 `node_c`）。
+所以不能拿它去数节点——第一次跑的人很容易搞混。
+
+### 陷阱 4：`EmptyState` 下的"扇入"其实什么都没汇总
+
+`EmptyState` 里 `pass`，没有任何字段，所以两种写法在**这个空图里功能上没区别**，唯一能观测到的就是执行次数和 step。
+**这恰恰是最好的教学设计**——把"扇入"这件事从"数据合并"里剥出来，纯粹看调度语义。
+
+---
+
+## 九、可视化：`display(graph)`
+
+代码最后用了：
 
 ```python
-class S4(TypedDict):
-    results: List[str]        # 没有 Annotated！
-# START → x, y；x, y → z，x/y 都返回 {"results": [...]}
+from IPython.display import display
+display(graph)
 ```
 
-**实测：**
+在 Jupyter / Colab / VSCode Notebook 里会**内联渲染 Mermaid 图**。
 
-```
-InvalidUpdateError: At key 'results': Can receive only one value per step.
-Use an Annotated key to handle multiple values.
-https://docs.langchain.com/oss/python/langgraph/errors/INVALID_CONCURRENT_GRAPH_UPDATE
-```
+注意：**两种写法画出来的图长得几乎一样**（都是 `node_c` 和 `node_d` 各有一条线指向 `node_e`）。
+光看图分辨不出是或还是与——这是最容易踩的坑：
 
-这不是"后写覆盖前写"，而是**直接报错**。
-LangGraph 的 `LastValue` channel 在一次 super-step 内对同一 key 只允许一次写入——它宁愿崩溃也不让你悄悄丢数据。**扇入的所有参与 key 必须有 reducer。**
+> **图上"两条线连到同一点"看着像与扇入，实际取决于你怎么注册的：**
+> - 两次 `add_edge("c","e")` + `"d","e"` → **或**（画出来一样，但语义是或）
+> - 一次 `add_edge(["c","d"],"e")` → **与**（画出来一样，语义是与）
+>
+> **必须看代码，不能看图。**
 
-### 3.5 ⚠️ 坑二：并行顺序不确定，别依赖 `calls` 的顺序
-
-实测里 `calls` 每次都是 `['a','b']`，但那是**单节点并发**的巧合（同一 super-step 内按任务提交顺序写入）。
-**节点内部耗时不同、或有 `Send` 动态扇出时，写入顺序不保证。** 需要确定顺序时分两步走：
+想要更清楚的流程图可以：
 
 ```python
-# 方案：先收集，再排序合成
-def collect(s):
-    ordered = sorted(s["results"], key=KEY_ORDER.index)  # 自己定序
-    return {"summary": ordered}
+print(graph.get_graph().draw_mermaid())
+```
+
+输出 Mermaid 源码，可以贴到任何支持的地方。
+
+---
+
+## 十、完整对照总结
+
+```
+                     写法一（或扇入）              写法二（与扇入）
+注册的边数                 2 条                       1 条（多源）
+node_e 执行次数             2 次                       1 次
+node_e 首次调度 step         3                          4
+node_e 看到的 node_c          ✅                         ✅
+node_e 看到的 node_d          ❌（第一次看不到）           ✅
+副作用发生次数               2 次                       1 次
+语义                        "谁到谁跑"                  "等齐全员"
+适用                       互斥输入 / 独立处理            并行分支总汇总
+```
+
+**本图（并行两路都要喂给 `node_e` 做汇总）的正确写法：与扇入。**
+
+```python
+builder.add_edge(["node_c", "node_d"], "node_e")
 ```
 
 ---
 
-## 四、或节点扇入（OR-join）：任一路到即触发
-
-### 4.1 形态一：if/else 汇合（最常见的误区）
-
-很多人以为"两条边指向同一个节点"就等于或扇入。**不一定**——要看这两条边是否**可能在同一 super-step 同时激活**。
-
-```python
-class S2(TypedDict):
-    calls: Annotated[List[str], operator.add]
-    opt:   bool
-
-def main(s):     return {"calls": ["main"]}
-def optional(s): return {"calls": ["optional"]}
-def merger(s):
-    print(f"[merger] calls={s['calls']}")
-    return {"calls": ["merger"]}
-
-def after_main(state) -> Literal["optional", "merger"]:
-    return "optional" if state["opt"] else "merger"
-
-g2 = StateGraph(S2)
-g2.add_node("main", main); g2.add_node("optional", optional); g2.add_node("merger", merger)
-g2.add_edge(START, "main")
-g2.add_conditional_edges("main", after_main, {"optional": "optional", "merger": "merger"})
-g2.add_edge("optional", "merger")   # optional 走完也回 merger
-g2.add_edge("merger", END)
-```
-
-**实测输出：**
-
-```
-== opt=True ==
-  [merger] calls=['main', 'optional']       ← optional 走完再汇合
-== opt=False ==
-  [merger] calls=['main']                   ← 跳过 optional 直接汇合
-```
-
-这就是**或扇入**：`merger` 有两条入边（来自 `main` 的条件边 + 来自 `optional` 的普通边），但**任一到达即执行**，不需要等另一条。
-因为条件边是**互斥**的——同一 super-step 只激活一条，所以永远不会出现"等齐"需求。
-
-> **关键判据**：入口边是**互斥的**（条件边、循环回边）→ 或扇入语义；
-> 入口边是**并行的**（多条 `add_edge` 从同一节点/SATRT 发出）→ 与扇入语义，**必须 reducer**。
-
-### 4.2 形态二：循环回边汇合
-
-```python
-def work(s):    return {"n": s["n"] + 1, "calls": ["work"]}
-def finalize(s):
-    print(f"[finalize] n={s['n']} calls={s['calls'][-3:]}")
-    return {"calls": ["finalize"]}
-
-def judge(state) -> Literal["work", "finalize"]:
-    return "work" if state["n"] < 3 else "finalize"
-
-g.add_edge(START, "work")
-g.add_conditional_edges("work", judge, {"work": "work", "finalize": "finalize"})
-g.add_edge("finalize", END)
-```
-
-**实测输出：**
-
-```
-[finalize] 被调用 n=3 calls=['work', 'work', 'work']
-{'n': 3, 'calls': ['work', 'work', 'work', 'finalize']}
-```
-
-`finalize` 只有一条入口，但"进入它"意味着循环退出——语义上仍是"某一路到达即汇合"。
-**这类或扇入不需要任何 reducer 也能跑**（`calls` 用了 reducer 只是因为想累积轨迹）。
-
-### 4.3 形态三：并行两路各自独立汇合（易错放大）
-
-```python
-# START 条件路由到 a 或 b，a/b 都指向 merge
-g.add_conditional_edges(START, router, {"a": "a", "b": "b"})
-g.add_edge("a", "merge")
-g.add_edge("b", "merge")
-```
-
-**实测：**
-
-```
-== path=a ==  [merge] calls=['a']  →  {'calls': ['a', 'merge']}
-== path=b ==  [merge] calls=['b']  →  {'calls': ['b', 'merge']}
-```
-
-每次只跑一条路，`merge` 拿到的只有该路径的写入。**如果误以为这是与扇入、在上面等了"另一路"，就会死等。**
-
----
-
-## 五、混淆两种扇入会造成什么 bug
-
-### bug 1：把或扇入当与扇入 → 想"等齐"结果只等到一路
-
-```python
-# 错误预期：merge 能同时看到 a 和 b
-# 实际：条件边互斥，永远只有一路，merge 只看到一路
-```
-
-**症状**：`state` 里永远是 `None` / 空列表，日志显示另一路"从没执行过"。
-**真相**：不是没执行，是**这次运行根本没走那条路**。
-
-### bug 2：把与扇入当或扇入 → 少配 reducer 直接崩
-
-见 §3.4，`InvalidUpdateError`。
-
-### bug 3：与扇入里某个分支可能走 END → 汇合点永远不触发
-
-```python
-# START → a, b；a → merge；b → 条件边 → (merge | END)
-# 若 b 本次走 END，merge 只剩 a 一路到达 —— 但它还有一个未激活的入边 b→merge
-```
-
-LangGraph 的行为是：**当前 super-step 里只要有一条入边被激活，节点就执行**（不会被"未激活的兄弟边"阻塞）。
-也就是说：**严格意义上的"必须 N 路全部到达"只在所有 N 路都无条件激活时才成立**。
-一旦某路可能中途退出，它就自动退化成"或"语义。
-
-> 想要"部分分支可跳过、但其余必须齐"的语义，做法是：
-> **用 reducer 收集 + 在汇合点自己判断数量**。
-> ```python
-> def merge(s):
->     if len(s["parts"]) < 3:            # 自己校验是否齐
->         raise RuntimeError("分支不齐")
-> ```
-> 或者把可跳过的分支改成**返回占位值**（`{"parts": ["b:skipped"]}`）而不是走 END。
-
----
-
-## 六、与扇入的最佳实践（凭经验总结）
-
-| 实践 | 原因 |
-|------|------|
-| **每个参与扇入的 key 都配 reducer** | 否则 `InvalidUpdateError` |
-| **汇合节点里自己校验完整性** | LangGraph 不保证"等齐N路"，只保证"激活了就执行" |
-| **别依赖列表顺序** | 并行写入顺序不保证；要顺序就自己 sort |
-| **汇合节点尽量纯函数** | 它可能被重跑（配合 checkpointer 时），副作用要幂等 |
-| **扇出前想清楚"是否可能中断"** | 一旦有路走 END，与扇入就退化 |
-| **路数固定就用 `add_edge` 硬连** | 比 `Send` 简单可读，图上可视化也清晰 |
-| **路数运行时才知道才用 `Send`** | 见（二）第五章 |
-
----
-
-## 七、与扇入 vs 或扇入的完整对照（含代码骨架）
-
-```python
-# ---------- 与扇入 AND-join ----------
-class AndState(TypedDict):
-    outs: Annotated[List[str], operator.add]     # ✅ reducer 必须
-
-g = StateGraph(AndState)
-g.add_node("w1", ...); g.add_node("w2", ...); g.add_node("join", ...)
-g.add_edge(START, "w1"); g.add_edge(START, "w2")  # 并行兄弟
-g.add_edge("w1", "join"); g.add_edge("w2", "join")  # 全部指同一节点
-# join 一次，看到 outs=['w1','w2']
-
-
-# ---------- 或扇入 OR-join ----------
-class OrState(TypedDict):
-    calls: Annotated[List[str], operator.add]    # reducer 可选
-
-def route(state) -> Literal["a", "b"]:
-    return state["which"]
-
-g = StateGraph(OrState)
-g.add_node("a", ...); g.add_node("b", ...); g.add_node("merge", ...)
-g.add_conditional_edges(START, route, {"a": "a", "b": "b"})   # 互斥
-g.add_edge("a", "merge"); g.add_edge("b", "merge")            # 哪条走都汇合
-# merge 一次，只看到走的那一路
-```
-
----
-
-## 八、决策清单
-
-写扇入时照着问自己：
-
-1. **几路汇聚到这个节点？** —— 数入边。
-2. **这些入边会同时激活吗？**
-   - 会（多条 `add_edge` 从同一祖先发出）→ **与扇入**，配 reducer，汇合点可校验齐活
-   - 不会（条件边 / 循环回边，互斥）→ **或扇入**，LastValue 就够
-3. **某一路可能中途退出（走 END）吗？**
-   - 会 → 与扇入退化成"或"，要么让退出分支返回占位值，要么在汇合点自己校验
-4. **汇合结果的顺序重要吗？**
-   - 重要 → 自己 sort，别信 reducer 的追加顺序
-5. **汇合节点有副作用吗（写库/发消息）？**
-   - 有 → 必须幂等，配合 checkpointer 时可能重跑
-6. **路数固定还是运行时才知道？**
-   - 固定 → 本篇 `add_edge`
-   - 动态 → `Send`（（二）第五章）
-
----
-
-## 九、踩坑清单（本篇实测汇总）
+## 十一、踩坑清单
 
 | # | 坑 | 现象 | 解法 |
 |---|-----|------|------|
-| 1 | 扇入 key 没配 reducer | `InvalidUpdateError: Can receive only one value per step` | 用 `Annotated[T, reducer]` |
-| 2 | 以为扇入节点会跑 N 次 | 实际只跑 1 次（实测 `invocations=1`） | 单次执行里拿全部兄弟结果 |
-| 3 | 依赖 reducer 追加顺序 | 单节点巧合稳定，动态扇出不保证 | 自己 sort |
-| 4 | 把条件边的汇合当与扇入 | 一直等不到"另一路" | 条件边互斥，是或扇入 |
-| 5 | 与扇入里一路走 END | 汇合点只看到部分数据 | 退出分支返占位值 或 汇合点自校验 |
-| 6 | 用 `Send` 的思维写静态扇入 | 想给每个分支独立 state | `Send` payload 才是独立 state；静态扇入共享主 state |
-| 7 | 以为 `add_sequence` 能连已有节点 | `ValueError: Node names must be unique` | `add_sequence` 只连它自己注册的 |
+| 1 | 用两条 `add_edge` 做汇总 | 汇总节点跑 N 次，副作用重复 | 改成 `add_edge([src...], tgt)` |
+| 2 | 以为画出来的图能看出语义 | 两种写法图长一样 | 看代码注册方式，不看图 |
+| 3 | 把 `add_edge("a","b")` + `("a","c")` 当分支 | 两个节点都执行了 | 分支用 `add_conditional_edges` |
+| 4 | 用 `langgraph_step` 数节点个数 | 步骤号与节点数对不上 | 它是 super-step 编号，同 step 可多节点 |
+| 5 | 或扇入下多个上游写同一 key | `InvalidUpdateError` | 配 `Annotated[T, reducer]`，或改与扇入 |
+| 6 | 与扇入里某路走了 END | 汇合点**不等齐**照样执行（退化成或） | 退出分支返占位值 / 汇合点自校验 |
+| 7 | 以为并行写入顺序固定 | 动态扇出时顺序不保证 | 需要顺序就自己 sort |
 
 ---
 
-## 十、自检问题
+## 十二、自检问题
 
-1. 区分与扇入/或扇入，**唯一需要看的**是哪个结构特征？（答：入口边是否会**同时**激活）
-2. 为什么三条 `add_edge(n, "join")` 的 `join` 只跑 1 次？靠什么机制？（答：目标节点入边全激活才调度；state 合并靠 reducer）
-3. 把 `Annotated[List[str], operator.add]` 改成 `List[str]` 后是"后到覆盖先到"还是报错？（答：直接报 `InvalidUpdateError`）
-4. 条件边的目标是同一节点，这算与扇入还是或扇入？为什么？
-5. 与扇入里某一路走了 END，汇合点会等它吗？（答：不等，会执行——与扇入退化成或）
-6. `Annotated[int, operator.add]` 能用来做扇入吗？给个场景。
-7. 为什么说"扇入节点天然是 super-step 分界线"？
-8. 静态扇入和 `Send` 动态扇入，state 的来源有什么本质差别？
+1. `add_edge(["node_c", "node_d"], "node_e")` 和两条独立 `add_edge` 在**注册层面**的区别是什么？
+2. 为什么或扇入下 `node_e` 的第一次执行看不到 `node_d` 的结果？
+3. `langgraph_step` 数的是什么？为什么 `node_b` 和 `node_c` 的 step 相同？
+4. 与扇入为什么让 `node_e` 从 step 3 推迟到 step 4？推后这一整轮在等谁？
+5. 如果 `node_e` 里要发一条消息给用户，用哪种扇入？为什么？
+6. 把 `node_a` 的两条 `add_edge` 改成 `add_conditional_edges` 后，这个图里还需要扇入吗？为什么？
+7. `EmptyState` 为什么让两种写法的"数据差异"看不出来？这说明扇入语义的本质是什么？
 
 ---
 
 ## 🔗 衔接
 
-- **往回**：[LangGraph（一）](./langgraph-01-图基础与状态管理.md) 的 Reducer 是**与扇入的前提**，没有它扇入直接崩。
-- **往回**：[LangGraph（二）](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md) 讲了 `Send` 动态扇出——本篇是它的"静态兄弟"：**固定路数用 `add_edge`，动态路数用 `Send`**。
-- **往回**：[MQE/HyDE](../hello-agents/08-进阶检索-MQE与HyDE.md) 的"扩展 → 并行检索 → 合并"：扩展路数已知 → 静态与扇入；扩展路数由 LLM 现算 → `Send`。
-- **往前**：Subgraph 作为扇入目标（多子图汇聚）、`Command(goto=[...])` 在节点内做静态并行分派、`defer` 与汇合节点的关系。
+- **往回**：[LangGraph（一）](./langgraph-01-图基础与状态管理.md)——Reducer 是这里做"有状态"版本的前提。
+- **往回**：[LangGraph（二）](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)——`Send` 动态扇出；本篇是它的**静态兄弟**：路数固定用 `add_edge`，路数运行时才知道用 `Send`。
+- **往前**：Subgraph 作为扇入目标（多个子图汇聚到父图节点）；`Command(goto=[...])` 在节点内部做静态并行分派。
