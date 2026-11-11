@@ -2,7 +2,7 @@
 
 > 学习日期：2026-11-11
 > 环境：本机 `langgraph 1.2.16` + `langgraph-checkpoint 4.3.1` + `langchain-core 1.7.0`，**下述实验全部实跑，输出原样贴出**
-> 承接：[（五）持久化](./langgraph-05-持久化-内存与PostgreSQL.md)（checkpointer 是中断的地基）、[（六）replay/fork](./langgraph-06-错误回复-replay与fork.md)（resume 的另一半）、[（七）记忆](./langgraph-07-记忆-短期上下文与长期Store.md)
+> 承接：[（五）持久化](langgraph-05-持久化-内存与PostgreSQL.md)（checkpointer 是中断的地基）、[（六）replay/fork](langgraph-06-错误回复-replay与fork.md)（resume 的另一半）、[（七）记忆](langgraph-07-记忆-短期上下文与长期Store.md)
 > 一句话：**中断（interrupt）让图可以"停下来等人"；工具节点（ToolNode）让"调工具"变成图上的一格；流式（stream_mode）让外面能"边跑边看"。这三件事凑在一起，才是能干活的 Agent。**
 
 ---
@@ -331,7 +331,7 @@ b.add_conditional_edges("model", tools_condition, {"tools": "tools", END: END})
 b.add_edge("tools", "model")          # ← 这一条就是"循环"
 ```
 
-这五句，就是 `create_agent` 内部那张图的全部结构（对照 [LangChain（四）](./langchain-04-agents.md)）。
+这五句，就是 `create_agent` 内部那张图的全部结构（对照 [LangChain（四）](../tools/langchain-04-agents.md)）。
 
 ---
 

@@ -71,31 +71,43 @@
 
 ---
 
+### LangGraph 框架 → 笔记 `ai/langgraph/` 下（8 篇）
+
+| 序号 | 主题 | 笔记 | 完成时间 |
+|------|------|------|----------|
+| 一 | 图基础与状态管理（建图五步 / Reducer / 条件边循环 / checkpointer） | [langgraph-01-图基础与状态管理](./langgraph/langgraph-01-图基础与状态管理.md) | 2026-10-24 |
+| 二 | 进阶建图（`add_sequence` / `path_map` / Router / `Send` / `defer`） | [langgraph-02-进阶建图](./langgraph/langgraph-02-进阶建图-defer-条件边-sequence-router-send.md) | 2026-10-25 |
+| 三 | 静态扇入（**或扇入执行 2 次 vs 与扇入执行 1 次且等齐**） | [langgraph-03-静态扇入](./langgraph/langgraph-03-静态扇入-与扇入与或扇入.md) | 2026-10-30 |
+| 四 | 控制流（`stream_mode` / `Command(goto)` / `CachePolicy` / `RetryPolicy`） | [langgraph-04-控制流](./langgraph/langgraph-04-控制流-输出-跳转-缓存-重试.md) | 2026-10-31 |
+| 五 | 持久化（InMemorySaver vs PostgresSaver / **跨进程 resume 中断** / durability 三档） | [langgraph-05-持久化](./langgraph/langgraph-05-持久化-内存与PostgreSQL.md) | 2026-11-02 |
+| 六 | 错误回复 · Replay · Fork（checkpoint 链三分支 / 异常 vs 中断） | [langgraph-06-错误回复-replay与fork](./langgraph/langgraph-06-错误回复-replay与fork.md) | 2026-11-09 |
+| 七 | 记忆系统（**短期=checkpointer / 长期=Store** / 语义检索 / 读写时机） | [langgraph-07-记忆](./langgraph/langgraph-07-记忆-短期上下文与长期Store.md) | 2026-11-10 |
+| 八 | 中断 · 工具节点 · 流式执行（**HITL 三件套** / `interrupt()` / `ToolNode` / `stream_mode`） | [langgraph-08-中断-工具节点-流式执行](./langgraph/langgraph-08-中断-工具节点-流式执行.md) | 2026-11-11 |
+
+### Learn Claude Code → 笔记 `ai/learn-claude-code/` 下（6 篇）
+
+| 序号 | 主题 | 笔记 | 完成时间 |
+|------|------|------|----------|
+| 前三章 | Agent Loop / 工具调用 / 三层权限隔离 | [learn-claude-code-前三章](./learn-claude-code/learn-claude-code-前三章.md) | 2026-09-17 |
+| 四 | 钩子函数（Hooks / 生命周期事件 / 权限接管） | [learn-claude-code-04-钩子函数](./learn-claude-code/learn-claude-code-04-钩子函数.md) | 2026-09-18 |
+| 五 | TodoWrite（任务清单 / 四态生命周期 / 提醒机制 / 模型可用性） | [learn-claude-code-05-todowrite](./learn-claude-code/learn-claude-code-05-todowrite.md) | 2026-09-20 |
+| 六 | Subagent 与 Skill 加载（上下文隔离 / 按需加载 / 成本模型） | [learn-claude-code-06-subagent与skill加载](./learn-claude-code/learn-claude-code-06-subagent与skill加载.md) | 2026-09-21 |
+| 七 | 上下文压缩（四级降级 / 首尾保留 / 引用化 / LLM 摘要兜底） | [learn-claude-code-07-上下文压缩](./learn-claude-code/learn-claude-code-07-上下文压缩.md) | 2026-09-22 |
+| 八 | 记忆系统（LLM 无状态 / 分层记忆 / CLAUDE.md / 与压缩配合） | [learn-claude-code-08-记忆系统](./learn-claude-code/learn-claude-code-08-记忆系统.md) | 2026-10-04 |
+
+---
+
 ### 研究/写作辅助工具 → 笔记 `ai/tools/` 下
 
 | 工具 | 主题 | 笔记 | 完成时间 |
 |------|------|------|----------|
 | Zotero | 文献管理·基础使用 | [zotero-基础使用](./tools/zotero-基础使用.md) | 2026-08-29 |
-| Learn Claude Code | 前三章：Agent Loop / 工具调用 / 三层权限隔离 | [learn-claude-code-前三章](./tools/learn-claude-code-前三章.md) | 2026-09-17 |
-| Learn Claude Code | 第四章：钩子函数（Hooks / 生命周期事件 / 权限接管） | [learn-claude-code-04-钩子函数](./tools/learn-claude-code-04-钩子函数.md) | 2026-09-18 |
-| Learn Claude Code | 第五章：TodoWrite（任务清单 / 四态生命周期 / 提醒机制 / 模型可用性） | [learn-claude-code-05-todowrite](./tools/learn-claude-code-05-todowrite.md) | 2026-09-20 |
-| Learn Claude Code | 第六章：Subagent 与 Skill 加载（上下文隔离 / 按需加载 / 成本模型） | [learn-claude-code-06-subagent与skill加载](./tools/learn-claude-code-06-subagent与skill加载.md) | 2026-09-21 |
-| Learn Claude Code | 第七章：上下文压缩（四级降级 / 首尾保留 / 引用化 / LLM 摘要兜底） | [learn-claude-code-07-上下文压缩](./tools/learn-claude-code-07-上下文压缩.md) | 2026-09-22 |
-| Learn Claude Code | 第八章：记忆系统（LLM 无状态 / 分层记忆 / CLAUDE.md 显式长期记忆 / 与压缩配合） | [learn-claude-code-08-记忆系统](./tools/learn-claude-code-08-记忆系统.md) | 2026-10-04 |
 | LangChain | 一：模型调用与消息体系（init_chat_model 统一初始化 / 六种调用方式 / model_kwargs·extra_body / LangSmith / AIMessage·ToolMessage） | [langchain-01-模型调用与消息体系](./tools/langchain-01-模型调用与消息体系.md) | 2026-10-06 |
 | LangChain | 二：工具调用 Tool Use（@tool 三要素 / StructuredTool / 模型只提议不执行·bind_tools / 手动回路与 ToolMessage 回灌 / create_agent 内置循环 / MVTS） | [langchain-02-tool-use](./tools/langchain-02-tool-use.md) | 2026-10-08 |
 | LangChain | 三：结构化输出（with_structured_output / Pydantic Schema 设计 / 底层 Function Calling / 校验与兜底） | [langchain-03-structured-output](./tools/langchain-03-structured-output.md) | 2026-10-08 |
 | LangChain | 四：Agent（create_agent / ReAct → 原生 Function Calling / 内部图结构 / Middleware / checkpointer 记忆 / HITL） | [langchain-04-agents](./tools/langchain-04-agents.md) | 2026-10-08 |
 | LangChain | 五：中间件 Middleware（六大钩子 node/wrap-style · 装饰器 vs 类 · 自定义 state · 执行顺序与 jump_to · 内置中间件全览 · 动态 prompt/模型/工具 · 工具监控 · 对照 Claude Code Hook） | [langchain-05-middleware](./tools/langchain-05-middleware.md) | 2026-10-10 |
-| LangGraph | 一：图基础与状态管理（建图五步 TypedDict State / Node 返增量 / START·END·条件边 / compile / invoke·stream；Reducer 默认覆盖 vs `Annotated[T,f]`；add_messages 按 id 更新；条件边反思-修正循环 + recursion_limit；stream_mode updates/values/messages/debug/custom；checkpointer super-step 快照 + thread_id 多轮记忆·线程隔离·get_state_history 时间旅行；对照 create_agent 内部图 | [langgraph-01-图基础与状态管理](./tools/langgraph-01-图基础与状态管理.md) | 2026-10-24 |
-| LangGraph | 二：进阶建图（`add_sequence` 批量连链 / `add_conditional_edges`+path_map 分层 / Router 纯函数决策层 / `Send` 动态并行扇出 / `defer` 仅同 super-step 内推迟 / interrupt 三铁律） | [langgraph-02-进阶建图](./tools/langgraph-02-进阶建图-defer-条件边-sequence-router-send.md) | 2026-10-25 |
-| LangGraph | 三：静态扇入（**同一张图两种汇合写法**：`add_edge("c","e")`×2 = **或扇入**·node_e 执行 2 次每次只见本路径写入 vs `add_edge(["c","d"],"e")` = **与扇入**·执行 1 次且等齐；`add_edge` 首参支持 `list[str]` 注册多源汇合边；`langgraph_step`=super-step 编号不是节点计数；图的画法相同**必须看代码不能看图**；有副作用的汇总节点必须用与扇入；langgraph 1.2.16 实测） | [langgraph-03-静态扇入](./tools/langgraph-03-静态扇入-与扇入与或扇入.md) | 2026-10-30 |
-| LangGraph | 四：控制流（输出 `stream_mode` updates/values/messages/custom/debug · `get_stream_writer()` 旁路不进 state · 跳转 `Command(goto/goto=[...]/goto=[Send...]/END)` · 缓存 `CachePolicy`+`compile(cache=)` 跨线程共享 · 重试 `RetryPolicy` 及「值错误默认不重试」黑名单 · 五节点实战图） | [langgraph-04-控制流](./tools/langgraph-04-控制流-输出-跳转-缓存-重试.md) | 2026-10-31 |
-| LangGraph | 五：持久化（**checkpointer 每 super-step 打 State 快照 + thread_id 索引**·parent_checkpoint_id 串成链=历史·一次线性图 invoke 产生 2N+1 个 checkpoint；**InMemorySaver**=进程内 defaultdict，多轮记忆/线程隔离/时间旅行/update_state/interrupt 恢复全都有，唯一硬伤活不过进程；**PostgresSaver** 四张表 checkpoints/checkpoint_blobs/checkpoint_writes/checkpoint_migrations·**setup() 必须手动调**·窄表存指针宽表存值；**★跨进程 resume 中断**：进程1 停在 next=('act',) → 进程2 Command(resume=True) 接上；生产 ConnectionPool 三件套 autocommit/prepare_threshold=0/dict_row + AsyncPostgresSaver；**durability 三档快照数 exit=1 / async=3 / sync=3**·ShallowPostgresSaver 已废弃；prune(keep_latest) 清空 blob 但状态不丢；checkpoint_ns 不能当业务隔离；三档选型 + 9 条踩坑） | [langgraph-05-持久化](./tools/langgraph-05-持久化-内存与PostgreSQL.md) | 2026-11-02 |
 | LangChain | 六：RAG 与文档加载（RAG 为什么需要·微调 vs RAG · 离线索引 + 在线检索生成两阶段 · Document 对象 page_content/metadata · Loader 家族 Text/PDF/Office/Web/结构化 · DirectoryLoader 批量加载 · 切分 RecursiveCharacterTextSplitter · 检索可作工具融入 Agent） | [langchain-06-rag与文档加载](./tools/langchain-06-rag与文档加载.md) | 2026-10-11 |
-| LangGraph | 六：错误回复 · Replay · Fork（**resume/replay/fork 三分支共用 checkpoint 链**·`invoke(None,cfg)`=不给新输入就着 checkpoint 走；异常 vs 中断两类型——异常抛出但现场留在 `tasks[].error`·中断 **正常返回带 `__interrupt__`** 用 `Command(resume=)` 恢复；**replay 会写回原链**（快照 4→6）要对照实验必须换 thread_id；fork=`update_state` 在链上打补丁生新帧·`parent` 指向被分叉帧·同线程 fork 会顶掉 head·新线程 fork 需手动 `as_node`（第三位置参数是 as_node 不是 config，传 dict 报 unhashable）；组合套路：找错帧→fork 到新线程→只重跑分岔点之后 | [langgraph-06-错误回复-replay与fork](./tools/langgraph-06-错误回复-replay与fork.md) | 2026-11-09 |
-| LangGraph | 七：记忆系统（**短期=checkpointer/环境上下文** vs **长期=Store**·`Runtime.context` 不写快照·namespace/key/value 数据模型·**语义检索须 put 时 `index=[...]`+`dims` 对齐**·query 软排序 vs filter 硬条件·读=进模型前注入系统提示·写=同步/后置/后台三时机·**累积型 vs 覆盖型 key 设计**·InMemoryStore 不支持 TTL·遗忘原语·双层实战骨架·9 条踩坑） | [langgraph-07-记忆](./tools/langgraph-07-记忆-短期上下文与长期Store.md) | 2026-11-10 |
-| LangGraph | 八：中断·工具节点·流式执行（**interrupt = 抛异常式暂停**·`invoke` 返回 `__interrupt__` + `get_state().tasks` 看 pending·**resume 会整个节点重跑**→interrupt 前代码必须幂等·副作用放之后；**无 checkpointer 时 invoke 不报错、resume 才报 `Cannot use Command(resume=...) without checkpointer`**；sqlite 实测跨进程 resume 接得上；**多 pending 中断必须按 id 喂 `Command(resume={id:val})` 可分批审批**；`@entrypoint` 函数式同样支持；**ToolNode 四件事**（读 tool_calls→并行执行→包 ToolMessage→add_messages 回写）+ `tools_condition` 五行边拼出 Agent 骨架；**工具内 interrupt = 工具审批**，节点有原子性（中断那轮 ToolMessage 全不落盘）；**⚠️ 最大坑：ToolNode 中断后所有工具全部重跑一遍**（实测轨迹 `['slow_first:enter','slow_first:enter','slow_first:resumed','quick_second:enter']`，安全工具 A 也执行两次）→ 幂等键或审批拆独立节点；**stream_mode**：resume 时 `updates` 收不到东西要用 `values`/`custom`、`custom` 结构化事件 + `messages` token 流可多路并发、**resume 会重放中断节点 interrupt 前的 custom 事件**→UI 按 interrupt id 去重；完整带审批 Agent 三场景实测 + 9 条踩坑 | [langgraph-08-中断-工具节点-流式执行](./tools/langgraph-08-中断-工具节点-流式执行.md) | 2026-11-11 |
 
 ---
 

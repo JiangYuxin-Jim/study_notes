@@ -2,7 +2,7 @@
 
 > 学习日期：2026-10-30
 > 环境：本机 `langgraph 1.2.16` + `langchain-core`，全部结论由**实际运行**验证
-> 承接：[LangGraph（二）· 进阶建图](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)（`Send` 动态扇出）
+> 承接：[LangGraph（二）· 进阶建图](langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)（`Send` 动态扇出）
 
 ---
 
@@ -339,7 +339,7 @@ final: {'log': ['a', 'b', 'c', 'd', 'e']}
 
 > ⚠️ 这里 `log` 必须用 `Annotated[List[str], operator.add]`。
 > 如果你在**或扇入**下用了一个**没有 reducer** 的 key，而两个上游恰好同时写它（同 super-step），会直接抛
-> `InvalidUpdateError: Can receive only one value per step`。这一点在[LangGraph（一）](./langgraph-01-图基础与状态管理.md)讲过，这里再强调一次。
+> `InvalidUpdateError: Can receive only one value per step`。这一点在[LangGraph（一）](langgraph-01-图基础与状态管理.md)讲过，这里再强调一次。
 
 ---
 
@@ -483,6 +483,6 @@ builder.add_edge(["node_c", "node_d"], "node_e")
 
 ## 🔗 衔接
 
-- **往回**：[LangGraph（一）](./langgraph-01-图基础与状态管理.md)——Reducer 是这里做"有状态"版本的前提。
-- **往回**：[LangGraph（二）](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)——`Send` 动态扇出；本篇是它的**静态兄弟**：路数固定用 `add_edge`，路数运行时才知道用 `Send`。
+- **往回**：[LangGraph（一）](langgraph-01-图基础与状态管理.md)——Reducer 是这里做"有状态"版本的前提。
+- **往回**：[LangGraph（二）](langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)——`Send` 动态扇出；本篇是它的**静态兄弟**：路数固定用 `add_edge`，路数运行时才知道用 `Send`。
 - **往前**：Subgraph 作为扇入目标（多个子图汇聚到父图节点）；`Command(goto=[...])` 在节点内部做静态并行分派。

@@ -2,7 +2,7 @@
 
 > 学习日期：2026-10-25
 > 环境：本机 `langgraph 1.2.16`（所有结论均为实际运行验证，非文档摘抄）
-> 承接：[LangGraph（一）图基础与状态管理](./langgraph-01-图基础与状态管理.md)
+> 承接：[LangGraph（一）图基础与状态管理](langgraph-01-图基础与状态管理.md)
 
 ---
 
@@ -444,7 +444,7 @@ g3: START → d(defer=True) → after → END
 
 ## 🔗 衔接
 
-- **往回**：[LangGraph（一）](./langgraph-01-图基础与状态管理.md) 的 Reducer 是 `Send` 汇聚的前提——没有 `Annotated[list, operator.add]`，多个 worker 的结果会互相覆盖。
+- **往回**：[LangGraph（一）](langgraph-01-图基础与状态管理.md) 的 Reducer 是 `Send` 汇聚的前提——没有 `Annotated[list, operator.add]`，多个 worker 的结果会互相覆盖。
 - **往回**：[MQE/HyDE](../hello-agents/08-进阶检索-MQE与HyDE.md) 的"扩展→并行检索→合并"正是 `Send` + reducer 的经典用法，本篇把它图化。
 - **往回**：[LangChain 五·Middleware](../tools/langchain-05-middleware.md) 的 `after_agent` vs 本篇 `defer`——语义相近但作用域不同，别混。
 - **往前**：Subgraph 子图（`Command(graph=...)` 配合）、`retry_policy` / `cache_policy` / `timeout` / `error_handler`（`add_node` 的其余参数）、手搓 ReAct 图对照 `create_agent`。

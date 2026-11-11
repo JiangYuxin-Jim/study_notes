@@ -2,7 +2,7 @@
 
 > 学习日期：2026-11-02
 > 环境：本机 `langgraph 1.2.16` + `langgraph-checkpoint 4.3.0` + `langgraph-checkpoint-postgres 3.2.0`（psycopg 3.3.6 / psycopg_pool 3.3.3）+ 本机 PostgreSQL 15.19，**所有结论逐条实跑，输出贴在对应位置**
-> 承接：[LangGraph（一）· 图基础与状态管理](./langgraph-01-图基础与状态管理.md)（checkpointer 在那里只是"知道有这么个东西"）→ [（二）进阶建图](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)（`interrupt` 三铁律第一条：必须 checkpointer）→ [（四）控制流](./langgraph-04-控制流-输出-跳转-缓存-重试.md)（文末留的伏笔："`durability` 模式与持久化 cache（Redis/Postgres）"）
+> 承接：[LangGraph（一）· 图基础与状态管理](langgraph-01-图基础与状态管理.md)（checkpointer 在那里只是"知道有这么个东西"）→ [（二）进阶建图](langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)（`interrupt` 三铁律第一条：必须 checkpointer）→ [（四）控制流](langgraph-04-控制流-输出-跳转-缓存-重试.md)（文末留的伏笔："`durability` 模式与持久化 cache（Redis/Postgres）"）
 > 一句话：**本篇把"状态存在哪"这件事从"一个参数"讲成"一条选型决策"。**
 
 ---
@@ -29,7 +29,7 @@
 
 先把"存什么"说清楚，后面所有行为都能推出来。
 
-LangGraph 的执行是 **super-step** 模型（[（三）篇](./langgraph-03-静态扇入-与扇入与或扇入.md)讲过 `langgraph_step` 就是 super-step 编号）。checkpointer 干的事是：
+LangGraph 的执行是 **super-step** 模型（[（三）篇](langgraph-03-静态扇入-与扇入与或扇入.md)讲过 `langgraph_step` 就是 super-step 编号）。checkpointer 干的事是：
 
 > **每跑完一个 super-step，就把"这一刻的完整 State + 待执行的下一步 + 元数据"打一个快照存下来，并用 `thread_id` 做索引。**
 
@@ -87,7 +87,7 @@ t2 #1: {'n': 1, 'log': ['inc->1']}
 
 两个关键点：
 
-- **`n` 累积到 2、3 不是"覆盖"，是 reducer 在叠加**。节点永远只返回 `{"n": 1}`，但 `Annotated[int, operator.add]` 让它把 1 加到**上一快照的值**上。这是 [（一）篇](./langgraph-01-图基础与状态管理.md) Reducer 语义在持久化下的自然结果 —— **reducer 的输入是"恢复出来的旧值"，不是空值。**
+- **`n` 累积到 2、3 不是"覆盖"，是 reducer 在叠加**。节点永远只返回 `{"n": 1}`，但 `Annotated[int, operator.add]` 让它把 1 加到**上一快照的值**上。这是 [（一）篇](langgraph-01-图基础与状态管理.md) Reducer 语义在持久化下的自然结果 —— **reducer 的输入是"恢复出来的旧值"，不是空值。**
 - **`t2` 从 1 开始** —— `thread_id` 是硬隔离边界，两条链互不可见。
 
 > ⚠️ 对照实验：**不传 checkpointer 时传 `thread_id` 不报错，但状态完全不存**（第二次 invoke 还是 `{'n': 1, ...}`）。这是个静默失效 —— 你以为有记忆，其实没有。
@@ -302,7 +302,7 @@ resume 后: 消息数=3 next=()
 
 **进程 2 什么都没重建，直接 `Command(resume=True)` 就接上了。** 消息历史、`pending_action`、`next=('act',)` 全部从 PG 里读回来。
 
-这就是为什么 [（二）篇](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md) 说 `interrupt` 必须配 checkpointer —— 更准确地说：**在生产环境必须配"能活过进程"的 checkpointer**。用 InMemorySaver 做 HITL，在多进程/多副本部署下等于随机 500（请求打到没有那份内存的实例上）。
+这就是为什么 [（二）篇](langgraph-02-进阶建图-defer-条件边-sequence-router-send.md) 说 `interrupt` 必须配 checkpointer —— 更准确地说：**在生产环境必须配"能活过进程"的 checkpointer**。用 InMemorySaver 做 HITL，在多进程/多副本部署下等于随机 500（请求打到没有那份内存的实例上）。
 
 ### 3.7 清理 API
 
@@ -465,7 +465,7 @@ async pool invoke: {'n': 1}
 
 ## 六、durability：控制"存多勤"
 
-这是本篇最有意思的一节，也是 [（四）篇](./langgraph-04-控制流-输出-跳转-缓存-重试.md) 留的伏笔。`invoke(..., durability=...)` 三档，实测**对同一次运行产生的快照数影响巨大**：
+这是本篇最有意思的一节，也是 [（四）篇](langgraph-04-控制流-输出-跳转-缓存-重试.md) 留的伏笔。`invoke(..., durability=...)` 三档，实测**对同一次运行产生的快照数影响巨大**：
 
 ```
 durability=exit   -> 快照数 1
@@ -574,10 +574,10 @@ app.invoke({"messages": [dup]}, c2)
 
 ## 九、本篇与前文的接口
 
-- **`interrupt`**（[（二）篇](./langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)）：本篇给了它"跨进程"的能力证明。三铁律里"必须 checkpointer"升级为"必须持久化 checkpointer"。
-- **`checkpointer` 与时间旅行**（[（一）篇](./langgraph-01-图基础与状态管理.md)）：本篇把"它存在哪、怎么存的、存成什么形状"全部落到了四张表。
-- **`durability`**（[（四）篇](./langgraph-04-控制流-输出-跳转-缓存-重试.md)）：那个伏笔在这里兑现 —— 并且发现 `ShallowPostgresSaver` 的废弃史正好解释了"为什么它变成了参数"。
-- **Middleware 的 `Summarization` / HITL**（[LangChain（五）篇](./langchain-05-middleware.md)）：压缩和中断都依赖"能读回历史"，用内存版在线上等于没做。
+- **`interrupt`**（[（二）篇](langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)）：本篇给了它"跨进程"的能力证明。三铁律里"必须 checkpointer"升级为"必须持久化 checkpointer"。
+- **`checkpointer` 与时间旅行**（[（一）篇](langgraph-01-图基础与状态管理.md)）：本篇把"它存在哪、怎么存的、存成什么形状"全部落到了四张表。
+- **`durability`**（[（四）篇](langgraph-04-控制流-输出-跳转-缓存-重试.md)）：那个伏笔在这里兑现 —— 并且发现 `ShallowPostgresSaver` 的废弃史正好解释了"为什么它变成了参数"。
+- **Middleware 的 `Summarization` / HITL**（[LangChain（五）篇](../tools/langchain-05-middleware.md)）：压缩和中断都依赖"能读回历史"，用内存版在线上等于没做。
 - **往前**：`CachePolicy` 目前只有 `InMemoryCache`，生产要持久化 cache 同样是这类决策；Subgraph 的 `checkpointer=True` 会让子图状态独立落盘（`checkpoint_ns` 的真正来源）。
 
 ---
