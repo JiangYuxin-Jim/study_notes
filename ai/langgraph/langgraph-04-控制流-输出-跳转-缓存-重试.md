@@ -439,5 +439,5 @@ CALLS = {'slow': 3, 'llm': 2}
 - **往回**：[LangGraph（一）图基础与状态管理](langgraph-01-图基础与状态管理.md)——`stream_mode` 与 checkpointer 都在那里起头；本篇把"输出"讲透。
 - **往回**：[LangGraph（二）进阶建图](langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)——`Send` 动态扇出；本篇给了它的 `Command` 版本。
 - **往回**：[LangGraph（三）静态扇入](langgraph-03-静态扇入-与扇入与或扇入.md)——`Command(goto=[...])` 并行派发后，收齐仍靠与扇入。
-- **横向**：[LangChain（五）Middleware](../tools/langchain-05-middleware.md)——Middleware 的 `ToolRetryMiddleware` / `ModelRetryMiddleware` 是**模型与工具层**的重试，本篇 `RetryPolicy` 是**节点层**的重试，别混。
+- **横向**：[LangChain（五）Middleware](../langchain/langchain-05-middleware.md)——Middleware 的 `ToolRetryMiddleware` / `ModelRetryMiddleware` 是**模型与工具层**的重试，本篇 `RetryPolicy` 是**节点层**的重试，别混。
 - **往前**：`interrupt()` + `Command(resume=...)` 做真正的 HITL（本篇 `hitl` 节点只是规则模拟）；Subgraph 与 `Command(graph=PARENT)` 跨图跳转；`durability` 模式与持久化 cache（Redis/Postgres）。

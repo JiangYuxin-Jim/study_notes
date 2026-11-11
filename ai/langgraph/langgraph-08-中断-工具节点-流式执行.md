@@ -331,7 +331,7 @@ b.add_conditional_edges("model", tools_condition, {"tools": "tools", END: END})
 b.add_edge("tools", "model")          # ← 这一条就是"循环"
 ```
 
-这五句，就是 `create_agent` 内部那张图的全部结构（对照 [LangChain（四）](../tools/langchain-04-agents.md)）。
+这五句，就是 `create_agent` 内部那张图的全部结构（对照 [LangChain（四）](../langchain/langchain-04-agents.md)）。
 
 ---
 

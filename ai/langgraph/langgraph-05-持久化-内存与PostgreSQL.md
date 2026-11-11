@@ -577,7 +577,7 @@ app.invoke({"messages": [dup]}, c2)
 - **`interrupt`**（[（二）篇](langgraph-02-进阶建图-defer-条件边-sequence-router-send.md)）：本篇给了它"跨进程"的能力证明。三铁律里"必须 checkpointer"升级为"必须持久化 checkpointer"。
 - **`checkpointer` 与时间旅行**（[（一）篇](langgraph-01-图基础与状态管理.md)）：本篇把"它存在哪、怎么存的、存成什么形状"全部落到了四张表。
 - **`durability`**（[（四）篇](langgraph-04-控制流-输出-跳转-缓存-重试.md)）：那个伏笔在这里兑现 —— 并且发现 `ShallowPostgresSaver` 的废弃史正好解释了"为什么它变成了参数"。
-- **Middleware 的 `Summarization` / HITL**（[LangChain（五）篇](../tools/langchain-05-middleware.md)）：压缩和中断都依赖"能读回历史"，用内存版在线上等于没做。
+- **Middleware 的 `Summarization` / HITL**（[LangChain（五）篇](../langchain/langchain-05-middleware.md)）：压缩和中断都依赖"能读回历史"，用内存版在线上等于没做。
 - **往前**：`CachePolicy` 目前只有 `InMemoryCache`，生产要持久化 cache 同样是这类决策；Subgraph 的 `checkpointer=True` 会让子图状态独立落盘（`checkpoint_ns` 的真正来源）。
 
 ---

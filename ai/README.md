@@ -97,17 +97,37 @@
 
 ---
 
-### 研究/写作辅助工具 → 笔记 `ai/tools/` 下
+### LangChain 框架 → 笔记 `ai/langchain/` 下（6 篇）
+
+| 序号 | 主题 | 笔记 | 完成时间 |
+|------|------|------|----------|
+| 一 | 模型调用与消息体系（`init_chat_model` / 六种调用方式 / `model_kwargs`·`extra_body` / LangSmith / AIMessage·ToolMessage） | [langchain-01-模型调用与消息体系](./langchain/langchain-01-模型调用与消息体系.md) | 2026-10-06 |
+| 二 | 工具调用 Tool Use（`@tool` 三要素 / `StructuredTool` / **模型只提议不执行**·`bind_tools` / 手动回路 / `create_agent` / MVTS） | [langchain-02-tool-use](./langchain/langchain-02-tool-use.md) | 2026-10-08 |
+| 三 | 结构化输出（`with_structured_output` / Pydantic Schema 设计 / 底层 Function Calling / 校验与兜底） | [langchain-03-structured-output](./langchain/langchain-03-structured-output.md) | 2026-10-08 |
+| 四 | Agent（`create_agent` / ReAct → 原生 Function Calling / 内部图结构 / Middleware / checkpointer 记忆 / HITL） | [langchain-04-agents](./langchain/langchain-04-agents.md) | 2026-10-08 |
+| 五 | 中间件 Middleware（**Agent 的 AOP**·六大钩子 / 装饰器 vs 类 / 执行顺序与 `jump_to` / 内置 18 个 / 四个实战） | [langchain-05-middleware](./langchain/langchain-05-middleware.md) | 2026-10-10 |
+| 六 | RAG 与文档加载（微调 vs RAG / 离线索引 + 在线检索两阶段 / `Document` / Loader 家族 / `DirectoryLoader` / 切分策略） | [langchain-06-rag与文档加载](./langchain/langchain-06-rag与文档加载.md) | 2026-10-11 |
+
+### 研究/写作辅助工具 → 笔记 `ai/zotero/` 下
 
 | 工具 | 主题 | 笔记 | 完成时间 |
 |------|------|------|----------|
-| Zotero | 文献管理·基础使用 | [zotero-基础使用](./tools/zotero-基础使用.md) | 2026-08-29 |
-| LangChain | 一：模型调用与消息体系（init_chat_model 统一初始化 / 六种调用方式 / model_kwargs·extra_body / LangSmith / AIMessage·ToolMessage） | [langchain-01-模型调用与消息体系](./tools/langchain-01-模型调用与消息体系.md) | 2026-10-06 |
-| LangChain | 二：工具调用 Tool Use（@tool 三要素 / StructuredTool / 模型只提议不执行·bind_tools / 手动回路与 ToolMessage 回灌 / create_agent 内置循环 / MVTS） | [langchain-02-tool-use](./tools/langchain-02-tool-use.md) | 2026-10-08 |
-| LangChain | 三：结构化输出（with_structured_output / Pydantic Schema 设计 / 底层 Function Calling / 校验与兜底） | [langchain-03-structured-output](./tools/langchain-03-structured-output.md) | 2026-10-08 |
-| LangChain | 四：Agent（create_agent / ReAct → 原生 Function Calling / 内部图结构 / Middleware / checkpointer 记忆 / HITL） | [langchain-04-agents](./tools/langchain-04-agents.md) | 2026-10-08 |
-| LangChain | 五：中间件 Middleware（六大钩子 node/wrap-style · 装饰器 vs 类 · 自定义 state · 执行顺序与 jump_to · 内置中间件全览 · 动态 prompt/模型/工具 · 工具监控 · 对照 Claude Code Hook） | [langchain-05-middleware](./tools/langchain-05-middleware.md) | 2026-10-10 |
-| LangChain | 六：RAG 与文档加载（RAG 为什么需要·微调 vs RAG · 离线索引 + 在线检索生成两阶段 · Document 对象 page_content/metadata · Loader 家族 Text/PDF/Office/Web/结构化 · DirectoryLoader 批量加载 · 切分 RecursiveCharacterTextSplitter · 检索可作工具融入 Agent） | [langchain-06-rag与文档加载](./tools/langchain-06-rag与文档加载.md) | 2026-10-11 |
+| Zotero | 文献管理·基础使用 | [zotero-基础使用](./zotero/zotero-基础使用.md) | 2026-08-29 |
+
+---
+
+### 📁 目录结构
+
+```
+ai/
+├── hello-agents/        智能体教程（Datawhale，16 章）
+├── langchain/           LangChain 框架（6 篇）
+├── langgraph/           LangGraph 框架（8 篇）
+├── learn-claude-code/   Claude Code 内部机制拆解（6 篇）
+├── transformer/         深度学习实战（手搓 Transformer）
+├── zotero/              研究工具
+└── README.md
+```
 
 ---
 
