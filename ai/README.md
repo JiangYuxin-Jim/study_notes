@@ -71,7 +71,7 @@
 
 ---
 
-### LangGraph 框架 → 笔记 `ai/langgraph/` 下（8 篇）
+### LangGraph 框架 → 笔记 `ai/langgraph/` 下（9 篇）
 
 | 序号 | 主题 | 笔记 | 完成时间 |
 |------|------|------|----------|
@@ -83,6 +83,7 @@
 | 六 | 错误回复 · Replay · Fork（checkpoint 链三分支 / 异常 vs 中断） | [langgraph-06-错误回复-replay与fork](./langgraph/langgraph-06-错误回复-replay与fork.md) | 2026-11-09 |
 | 七 | 记忆系统（**短期=checkpointer / 长期=Store** / 语义检索 / 读写时机） | [langgraph-07-记忆](./langgraph/langgraph-07-记忆-短期上下文与长期Store.md) | 2026-11-10 |
 | 八 | 中断 · 工具节点 · 流式执行（**HITL 三件套** / `interrupt()` / `ToolNode` / `stream_mode`） | [langgraph-08-中断-工具节点-流式执行](./langgraph/langgraph-08-中断-工具节点-流式执行.md) | 2026-11-11 |
+| 九 | Subgraph 子图与静态发现（**两种接入方式** / `xray=True` / **推翻「链式导致解析失败」的误判**·三组控制变量实验） | [langgraph-09-Subgraph子图与静态发现](./langgraph/langgraph-09-Subgraph子图与静态发现.md) | 2026-11-11 |
 
 ### Learn Claude Code → 笔记 `ai/learn-claude-code/` 下（6 篇）
 
@@ -122,7 +123,7 @@
 ai/
 ├── hello-agents/        智能体教程（Datawhale，16 章）
 ├── langchain/           LangChain 框架（6 篇）
-├── langgraph/           LangGraph 框架（8 篇）
+├── langgraph/           LangGraph 框架（9 篇）+ labs/ 实验脚本
 ├── learn-claude-code/   Claude Code 内部机制拆解（6 篇）
 ├── transformer/         深度学习实战（手搓 Transformer）
 ├── zotero/              研究工具
