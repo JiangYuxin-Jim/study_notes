@@ -109,6 +109,14 @@
 | 五 | 中间件 Middleware（**Agent 的 AOP**·六大钩子 / 装饰器 vs 类 / 执行顺序与 `jump_to` / 内置 18 个 / 四个实战） | [langchain-05-middleware](./langchain/langchain-05-middleware.md) | 2026-10-10 |
 | 六 | RAG 与文档加载（微调 vs RAG / 离线索引 + 在线检索两阶段 / `Document` / Loader 家族 / `DirectoryLoader` / 切分策略） | [langchain-06-rag与文档加载](./langchain/langchain-06-rag与文档加载.md) | 2026-10-11 |
 
+### 论文精读 → 笔记 `ai/papers/` 下
+
+| 序号 | 论文 | 主题 | 完成时间 |
+|------|------|------|----------|
+| 1 | [Mirror Illusion Art (CVPR 2026)](./papers/01-Mirror-Illusion-Art-AutoMIA.md) | **AutoMIA 双视图逆向设计**：两张目标图（镜前 A / 镜中 B）→ 同一个 3D 体素物体的几何+颜色联合优化；治四类缺陷的四个模块 **PAC**（投影对齐连通块筛选·治表面噪声）· **PWA**（位置加权自适应·治背景噪声）· **IVP**（内部体素密度下限·治内部断裂）· **SCD**（形状→联合→颜色三阶段调度·治形状颜色失衡）；128³ 体素 · PyTorch3D · 单卡 76s/2.6GB · SL 0.989/NL 0.049/SS 0.931 全面优于 SA/SAR 但**时间不是最优**（SA 50s）；观察角约束 `θ₁<Θ<θ₂`；局限（两图宽度需相近·分辨率不超体素分辨率）＋ 原文 4 处笔误/矛盾存疑 | 2026-11-14 |
+
+---
+
 ### 研究/写作辅助工具 → 笔记 `ai/zotero/` 下
 
 | 工具 | 主题 | 笔记 | 完成时间 |
@@ -125,6 +133,7 @@ ai/
 ├── langchain/           LangChain 框架（6 篇）
 ├── langgraph/           LangGraph 框架（9 篇）+ labs/ 实验脚本
 ├── learn-claude-code/   Claude Code 内部机制拆解（6 篇）
+├── papers/              论文精读（CVPR 等）
 ├── transformer/         深度学习实战（手搓 Transformer）
 ├── zotero/              研究工具
 └── README.md
